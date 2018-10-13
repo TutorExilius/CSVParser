@@ -7,7 +7,6 @@
 #include <fstream>
 #include <sstream>
 
-
 // static ---
 std::string CSVParser::extractFileName( const std::string &fullFileName )
 {
@@ -81,7 +80,7 @@ std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector
 		{
 			bool finishCombination = false;
 
-			if (combineMode && !isValid)
+			if( combineMode && !isValid )
 			{
 				combineMode = false;
 				finishCombination = true;
@@ -98,7 +97,7 @@ std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector
 				if( data.size() > 0 )
 				{
 					data.pop_back();
-					recombined.push_back(data);
+					recombined.push_back( data );
 					data.clear();
 				}
 			}
@@ -119,15 +118,15 @@ void CSVParser::maskColumnNewlines( std::vector<std::string> &seperatedColumns )
 	{
 		if (column.size() >= 2)
 		{
-			auto startDoubleQuote = column.find_first_of('\"');
-			auto endDoubleQuote = column.find_last_of('\"');
+			auto startDoubleQuote = column.find_first_of( '\"' );
+			auto endDoubleQuote = column.find_last_of( '\"' );
 
 			if (startDoubleQuote != std::string::npos && endDoubleQuote != std::string::npos &&
 				startDoubleQuote < endDoubleQuote )
 			{
 				if( CSVParser::count( column, '\"' ) > 2 )
 				{
-					endDoubleQuote = column.substr(0, endDoubleQuote - 1).find_last_of('\"');
+					endDoubleQuote = column.substr( 0, endDoubleQuote - 1 ).find_last_of( '\"' );
 				}
 
 				std::string tmp = column.substr( startDoubleQuote, endDoubleQuote - startDoubleQuote );
@@ -178,7 +177,7 @@ size_t CSVParser::count( const std::string &str, const char ch )
 
 bool CSVParser::isEven( const int &num )
 {
-	return (num % 2 == 0);
+	return ( num % 2 == 0 );
 }
 
 std::string CSVParser::generateRandomString( const size_t stringLength  )
@@ -304,7 +303,7 @@ void CSVParser::setFilePath( const std::string &filePath )
 	this->filePath = filePath;
 }
 
-std::vector<std::string> CSVParser::createRows(const std::vector<std::string> &seperatedColumns)
+std::vector<std::string> CSVParser::createRows( const std::vector<std::string> &seperatedColumns )
 {
 	std::vector<std::string> rows;
 	std::stringstream ss;
