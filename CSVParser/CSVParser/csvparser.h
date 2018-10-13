@@ -24,18 +24,16 @@ must be preserved.Contributors provide an express grant of patent rights.
 class CSVParser
 {
 public:
+	// defines ---
 	using Matrix = std::vector<std::vector<std::string>>;
+	// ---
 
+	// static ---
 	static std::string extractFileName( const std::string &fullFileName );
 	static std::string extractFilePath( const std::string &fullFileName );
 	static std::string replaceAll( std::string str, const std::string &from, const std::string &to );
-	static std::vector<std::string> combineMissplittedColumns( const std::vector<std::string> &seperatedColumns );
-	static void maskColumnNewlines( std::vector<std::string> &seperatedColumns );
-	static void unMaskColumnNewlines( std::vector<std::string> &rows );
-	static bool isValidQuoted( const std::string &str );
-	static size_t count( const std::string &str, const char ch );
-	static bool isEven( const int &num );
 	static std::string generateRandomString( const size_t stringLength );
+	// ---
 
 	CSVParser( const char seperator = ';' );
 	virtual ~CSVParser();
@@ -50,8 +48,6 @@ public:
 	std::string getCSVOutput() const;
 	char getSeperator() const;
 
-	void setFullFileName( const std::string &fullFileName );
-
 private:
 	// deletes ---
 	CSVParser( const CSVParser &obj ) = delete;
@@ -61,6 +57,13 @@ private:
 	// ---
 
 	// helper-methods ---
+	std::vector<std::string> combineMissplittedColumns( const std::vector<std::string> &seperatedColumns );
+	void maskColumnNewlines( std::vector<std::string> &seperatedColumns );
+	void unMaskColumnNewlines( std::vector<std::string> &rows );
+	bool isValidQuoted( const std::string &str );
+	size_t count( const std::string &str, const char ch );
+	bool isEven( const int &num );
+	void setFullFileName( const std::string &fullFileName );
 	void setFileName( const std::string &fileName );
 	void setFilePath( const std::string &filePath );
 	std::vector<std::string> createRows( const std::vector<std::string> &seperatedColumns );

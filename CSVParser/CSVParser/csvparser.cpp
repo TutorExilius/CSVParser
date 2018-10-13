@@ -74,133 +74,6 @@ std::string CSVParser::replaceAll( std::string str, const std::string &from, con
 	return std::move( str );
 }
 
-
-std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector<std::string> &seperatedColumns )
-{
-	std::vector<std::string> recombined;
-	std::string data;
-
-	bool combineMode = false;
-
-	for( const auto column : seperatedColumns )
-	{
-		bool isValid = CSVParser::isValidQuoted( column );
-
-		if( isValid && !combineMode )
-		{
-			if( data.size() > 0 )
-			{
-				data.pop_back();
-				recombined.push_back( data );
-				data.clear();
-			}
-
-			recombined.push_back( column );
-		}
-		else
-		{
-			bool finishCombination = false;
-
-			if( combineMode && !isValid )
-			{
-				combineMode = false;
-				finishCombination = true;
-			}
-			else if( !combineMode )
-			{
-				combineMode = true;
-			}
-
-			data += column + ';';
-
-			if( finishCombination )
-			{
-				if( data.size() > 0 )
-				{
-					data.pop_back();
-					recombined.push_back( data );
-					data.clear();
-				}
-			}
-		}
-	}
-
-	if( data.size() > 0 )
-	{
-		recombined.push_back( data );
-	}
-
-	return std::move( recombined );
-}
-
-void CSVParser::maskColumnNewlines( std::vector<std::string> &seperatedColumns )
-{
-	for( auto &column : seperatedColumns )
-	{
-		if( column.size() >= 2 )
-		{
-			auto startDoubleQuote = column.find_first_of( '\"' );
-			auto endDoubleQuote = column.find_last_of( '\"' );
-
-			if( startDoubleQuote != std::string::npos && endDoubleQuote != std::string::npos &&
-				startDoubleQuote < endDoubleQuote )
-			{
-				if( CSVParser::count( column, '\"' ) > 2 )
-				{
-					endDoubleQuote = column.substr( 0, endDoubleQuote - 1 ).find_last_of( '\"' );
-				}
-
-				std::string tmp = column.substr( startDoubleQuote, endDoubleQuote - startDoubleQuote );
-				tmp = CSVParser::replaceAll( tmp, "\n", "\\n" );
-
-				column = column.replace( startDoubleQuote, endDoubleQuote - startDoubleQuote, tmp );
-			}
-		}
-	}
-}
-
-void CSVParser::unMaskColumnNewlines( std::vector<std::string> &rows )
-{
-	for( auto &row : rows )
-	{
-		row = CSVParser::replaceAll( row, "\\n", "\n" );
-	}
-}
-
-bool CSVParser::isValidQuoted( const std::string &str )
-{
-	size_t cnt = CSVParser::count( str, '\"' );
-
-	if( CSVParser::isEven( static_cast<int>( cnt ) ) )
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-size_t CSVParser::count( const std::string &str, const char ch )
-{
-	size_t cnt = 0;
-
-	for( const auto &c : str )
-	{
-		if( ch == c )
-		{
-			++cnt;
-		}
-	}
-
-	return cnt;
-}
-
-bool CSVParser::isEven( const int &num )
-{
-	return ( num % 2 == 0 );
-}
-
 std::string CSVParser::generateRandomString( const size_t stringLength )
 {
 	std::string maskingChars{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890" };
@@ -310,6 +183,133 @@ std::string CSVParser::getCSVOutput() const
 char CSVParser::getSeperator() const
 {
 	return this->seperator;
+}
+
+std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector<std::string> &seperatedColumns )
+{
+	std::vector<std::string> recombined;
+	std::string data;
+
+	bool combineMode = false;
+
+	for( const auto column : seperatedColumns )
+	{
+		bool isValid = CSVParser::isValidQuoted( column );
+
+		if( isValid && !combineMode )
+		{
+			if( data.size() > 0 )
+			{
+				data.pop_back();
+				recombined.push_back( data );
+				data.clear();
+			}
+
+			recombined.push_back( column );
+		}
+		else
+		{
+			bool finishCombination = false;
+
+			if( combineMode && !isValid )
+			{
+				combineMode = false;
+				finishCombination = true;
+			}
+			else if( !combineMode )
+			{
+				combineMode = true;
+			}
+
+			data += column + ';';
+
+			if( finishCombination )
+			{
+				if( data.size() > 0 )
+				{
+					data.pop_back();
+					recombined.push_back( data );
+					data.clear();
+				}
+			}
+		}
+	}
+
+	if( data.size() > 0 )
+	{
+		recombined.push_back( data );
+	}
+
+	return std::move( recombined );
+}
+
+
+void CSVParser::maskColumnNewlines( std::vector<std::string> &seperatedColumns )
+{
+	for( auto &column : seperatedColumns )
+	{
+		if( column.size() >= 2 )
+		{
+			auto startDoubleQuote = column.find_first_of( '\"' );
+			auto endDoubleQuote = column.find_last_of( '\"' );
+
+			if( startDoubleQuote != std::string::npos && endDoubleQuote != std::string::npos &&
+				startDoubleQuote < endDoubleQuote )
+			{
+				if( CSVParser::count( column, '\"' ) > 2 )
+				{
+					endDoubleQuote = column.substr( 0, endDoubleQuote - 1 ).find_last_of( '\"' );
+				}
+
+				std::string tmp = column.substr( startDoubleQuote, endDoubleQuote - startDoubleQuote );
+				tmp = CSVParser::replaceAll( tmp, "\n", "\\n" );
+
+				column = column.replace( startDoubleQuote, endDoubleQuote - startDoubleQuote, tmp );
+			}
+		}
+	}
+}
+
+void CSVParser::unMaskColumnNewlines( std::vector<std::string> &rows )
+{
+	for( auto &row : rows )
+	{
+		row = CSVParser::replaceAll( row, "\\n", "\n" );
+	}
+}
+
+bool CSVParser::isValidQuoted( const std::string &str )
+{
+	size_t cnt = CSVParser::count( str, '\"' );
+
+	if( CSVParser::isEven( static_cast<int>( cnt ) ) )
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+size_t CSVParser::count( const std::string &str, const char ch )
+{
+	size_t cnt = 0;
+
+	for( const auto &c : str )
+	{
+		if( ch == c )
+		{
+			++cnt;
+		}
+	}
+
+	return cnt;
+}
+
+bool CSVParser::isEven( const int &num )
+{
+	return ( num % 2 == 0 );
 }
 
 void CSVParser::setFullFileName( const std::string &fullFileName )
