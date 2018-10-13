@@ -150,7 +150,7 @@ std::string CSVParser::getFilePath() const
 
 std::string CSVParser::getFullFileName() const
 {
-	return this->filePath + this->fileName;
+	return this->getFilePath() + this->getFileName();
 }
 
 const CSVParser::Matrix& CSVParser::getCSVMatrix() const
@@ -242,7 +242,6 @@ std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector
 
 	return std::move( recombined );
 }
-
 
 void CSVParser::maskColumnNewlines( std::vector<std::string> &seperatedColumns )
 {
@@ -413,9 +412,16 @@ void CSVParser::mapCSVData( const std::vector<std::string> &rows )
 		csvDataMatrix.emplace_back( std::move( columns ) );
 	}
 
-	// resize vectors to column-title length
-	for( auto &xVec : this->csvDataMatrix )
+	if( cntColumnTitles > 0 )
 	{
-		xVec.resize( this->csvDataMatrix[0].size() ); // first index contains the vector of column-titles
+		// resize vectors to column-title length
+		for( auto &xVec : this->csvDataMatrix )
+		{
+			xVec.resize( cntColumnTitles );
+		}
+	}
+	else
+	{
+		throw "ColumTitles not found!";
 	}
 }
