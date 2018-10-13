@@ -76,7 +76,7 @@ std::string CSVParser::replaceAll( std::string str, const std::string &from, con
 
 std::string CSVParser::generateRandomString( const size_t stringLength )
 {
-	std::string maskingChars{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890" };
+	std::string maskingChars{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890" };
 
 	std::string str( stringLength, '\0' );
 
@@ -221,7 +221,7 @@ std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector
 				combineMode = true;
 			}
 
-			data += column + ';';
+			data += column + this->seperator;
 
 			if( finishCombination )
 			{

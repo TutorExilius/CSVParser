@@ -20,8 +20,21 @@ must be preserved.Contributors provide an express grant of patent rights.
 
 #include "csvparser.h"
 
+#include <fstream>
+
 int main()
 {
+	CSVParser csvParser{ ',' };
+	csvParser.parse( R"(C:\Users\exi\Desktop\stdplan.csv)" );
+
+	std::ofstream out{ R"(C:\Users\exi\Desktop\OUT.csv)" };
+
+	if( !out )
+		std::cout << "nope";
+
+	out << csvParser.getCSVOutput();
+
+	out.close();
 
 	system( "PAUSE" );
 	return 0;
