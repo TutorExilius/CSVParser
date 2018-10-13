@@ -33,10 +33,10 @@ std::string CSVParser::extractFilePath( const std::string &fullFileName )
 	std::string tmpFileName = CSVParser::replaceAll( fullFileName, "/", "\\" );
 
 	const size_t pos = tmpFileName.find_last_of( '\\' );
-	
+
 	if( pos != std::string::npos )
 	{
-		return std::move( tmpFileName.substr( 0, pos+1 ) );
+		return std::move( tmpFileName.substr( 0, pos + 1 ) );
 	}
 	else
 	{
@@ -48,7 +48,7 @@ std::string CSVParser::replaceAll( std::string str, const std::string &from, con
 {
 	size_t start_pos = 0;
 
-	while( (start_pos = str.find( from, start_pos ) ) != std::string::npos )
+	while( ( start_pos = str.find( from, start_pos ) ) != std::string::npos )
 	{
 		str.replace( start_pos, from.size(), to );
 		start_pos += to.size();
@@ -120,12 +120,12 @@ void CSVParser::maskColumnNewlines( std::vector<std::string> &seperatedColumns )
 {
 	for( auto &column : seperatedColumns )
 	{
-		if (column.size() >= 2)
+		if( column.size() >= 2 )
 		{
 			auto startDoubleQuote = column.find_first_of( '\"' );
 			auto endDoubleQuote = column.find_last_of( '\"' );
 
-			if (startDoubleQuote != std::string::npos && endDoubleQuote != std::string::npos &&
+			if( startDoubleQuote != std::string::npos && endDoubleQuote != std::string::npos &&
 				startDoubleQuote < endDoubleQuote )
 			{
 				if( CSVParser::count( column, '\"' ) > 2 )
@@ -154,7 +154,7 @@ bool CSVParser::isValidQuoted( const std::string &str )
 {
 	size_t cnt = CSVParser::count( str, '\"' );
 
-	if( CSVParser::isEven( cnt ) )
+	if( CSVParser::isEven( static_cast<int>( cnt ) ) )
 	{
 		return true;
 	}
@@ -184,12 +184,11 @@ bool CSVParser::isEven( const int &num )
 	return ( num % 2 == 0 );
 }
 
-std::string CSVParser::generateRandomString( const size_t stringLength  )
+std::string CSVParser::generateRandomString( const size_t stringLength )
 {
 	std::string maskingChars{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890" };
 
 	std::string str( stringLength, '\0' );
-	double exp = static_cast<double>( sizeof(char) );
 
 	for( size_t i = 0; i < stringLength; ++i )
 	{
@@ -202,7 +201,7 @@ std::string CSVParser::generateRandomString( const size_t stringLength  )
 // ---
 
 CSVParser::CSVParser( const char seperator )
-: seperator{ seperator }
+	: seperator{ seperator }
 {
 }
 
@@ -291,6 +290,11 @@ std::string CSVParser::getCSVOutput() const
 	return ss.str();
 }
 
+char CSVParser::getSeperator() const
+{
+	return this->seperator;
+}
+
 void CSVParser::setFullFileName( const std::string &fullFileName )
 {
 	this->setFileName( CSVParser::extractFileName( fullFileName ) );
@@ -316,7 +320,7 @@ std::vector<std::string> CSVParser::createRows( const std::vector<std::string> &
 	for( const auto &column : seperatedColumns )
 	{
 		ss << column;
-		
+
 		if( ++cnt < seperatedColumns.size() )
 		{
 			ss << this->seperator;
@@ -326,7 +330,7 @@ std::vector<std::string> CSVParser::createRows( const std::vector<std::string> &
 	std::string row;
 	while( std::getline( ss, row ) )
 	{
-		rows.push_back (row );
+		rows.push_back( row );
 	}
 
 	return std::move( rows );
@@ -345,14 +349,14 @@ void CSVParser::maskColumnSeperators( std::vector<std::string> &rows )
 		// 
 		for( const auto &row : rows )
 		{
-			if( row.find(randomString) != std::string::npos )
+			if( row.find( randomString ) != std::string::npos )
 			{
 				// found unique string in row, so break loop and generate new string
 				break;
 			}
 
 			// randomString not found, so randomString is unique!
-			this->seperatorMaskingStr = randomString;			
+			this->seperatorMaskingStr = randomString;
 			foundUniqueString = true;
 		}
 
@@ -371,7 +375,7 @@ void CSVParser::mapCSVData( const std::vector<std::string> &rows )
 	size_t cntColumnTitles = 0;
 
 	for( const auto &row : rows )
-	{ 
+	{
 		++rowsCnt;
 
 		std::stringstream ss{ row };

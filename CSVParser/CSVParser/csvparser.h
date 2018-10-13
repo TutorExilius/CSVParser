@@ -31,6 +31,7 @@ public:
 	std::string getFullFileName() const;
 	const Matrix& getCSVMatrix() const;
 	std::string getCSVOutput() const;
+	char getSeperator() const;
 
 	void setFullFileName( const std::string &fullFileName );
 

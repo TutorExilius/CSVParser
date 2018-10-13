@@ -1,7 +1,7 @@
 #include "file_not_found_exception.h"
 
 FileNotFoundException::FileNotFoundException( const std::string &errorMessage )
-: errorMessage{ errorMessage }
+	: errorMessage{ errorMessage }
 {
 }
 
