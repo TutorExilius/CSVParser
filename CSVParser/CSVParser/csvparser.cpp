@@ -14,9 +14,13 @@ std::string CSVParser::extractFileName( const std::string &fullFileName )
 
 	const size_t pos = tmpFileName.find_last_of( '\\' );
 
-	if( pos != std::string::npos && pos+1 < tmpFileName.size() )
+	if( pos != std::string::npos && pos + 1 < tmpFileName.size() )
 	{
-		return std::move( tmpFileName.substr( pos+1 ) );
+		return std::move( tmpFileName.substr( pos + 1 ) );
+	}
+	else if( tmpFileName.size() > 0 )
+	{
+		return tmpFileName;
 	}
 	else
 	{
