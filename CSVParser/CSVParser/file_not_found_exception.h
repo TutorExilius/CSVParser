@@ -26,7 +26,7 @@ class FileNotFoundException final : public std::exception
 public:
 	explicit FileNotFoundException( const std::string &errorMessage );
 
-	const char* what() const;
+	const char* what() const noexcept override;
 
 private:
 	std::string errorMessage;

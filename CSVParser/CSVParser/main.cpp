@@ -24,13 +24,13 @@ must be preserved.Contributors provide an express grant of patent rights.
 
 int main()
 {
-	CSVParser csvParser{ L',' };
+	CSVParser csvParser{ L';' };
 	csvParser.parse( LR"(C:\Users\exi\Desktop\FR_VokabelBox.csv)" );
 
-	std::wofstream out{ LR"(C:\Users\exi\Desktop\OUT.csv)" };
+	std::wofstream out{ LR"(C:\Users\twitch\Desktop\OUT.csv)" };
 
 	if( !out )
-		std::wcout << "nope";
+		std::wcout << L"nope";
 
 	out << csvParser.getCSVOutput();
 

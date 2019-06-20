@@ -22,7 +22,7 @@ FileNotFoundException::FileNotFoundException( const std::string &errorMessage )
 {
 }
 
-const char* FileNotFoundException::what() const
+const char* FileNotFoundException::what() const noexcept
 {
 	return this->errorMessage.c_str();
 }
