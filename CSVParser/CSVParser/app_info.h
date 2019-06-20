@@ -5,7 +5,7 @@
 
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
-#define VERSION_PATCH 3
+#define VERSION_PATCH 4
 
 #define APP_NAME "CSV Parser"
 #define AUTHOR "Tutor Exilius"
