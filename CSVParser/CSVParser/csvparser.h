@@ -25,28 +25,28 @@ class CSVParser
 {
 public:
 	// defines ---
-	using Matrix = std::vector<std::vector<std::string>>;
+	using Matrix = std::vector<std::vector<std::wstring>>;
 	// ---
 
 	// static ---
-	static std::string extractFileName( const std::string &fullFileName );
-	static std::string extractFilePath( const std::string &fullFileName );
-	static std::string replaceAll( std::string str, const std::string &from, const std::string &to );
-	static std::string generateRandomString( const size_t stringLength );
+	static std::wstring extractFileName( const std::wstring &fullFileName );
+	static std::wstring extractFilePath( const std::wstring &fullFileName );
+	static std::wstring replaceAll( std::wstring str, const std::wstring &from, const std::wstring &to );
+	static std::wstring generateRandomString( const size_t stringLength );
 	// ---
 
-	CSVParser( const char seperator = ';' );
+	CSVParser( const wchar_t seperator = L';' );
 	virtual ~CSVParser();
 
-	void parse( const std::string &fullFileName );
-	void parse( const std::string &fullFileName, const char seperator );
+	void parse( const std::wstring &fullFileName );
+	void parse( const std::wstring &fullFileName, const wchar_t seperator );
 
-	std::string getFileName() const;
-	std::string getFilePath() const;
-	std::string getFullFileName() const;
+	std::wstring getFileName() const;
+	std::wstring getFilePath() const;
+	std::wstring getFullFileName() const;
 	const Matrix& getCSVMatrix() const;
-	std::string getCSVOutput() const;
-	char getSeperator() const;
+	std::wstring getCSVOutput() const;
+	wchar_t getSeperator() const;
 
 private:
 	// deletes ---
@@ -57,25 +57,25 @@ private:
 	// ---
 
 	// helper-methods ---
-	std::vector<std::string> combineMissplittedColumns( const std::vector<std::string> &seperatedColumns );
-	void maskColumnNewlines( std::vector<std::string> &seperatedColumns );
-	void unMaskColumnNewlines( std::vector<std::string> &rows );
-	bool isValidQuoted( const std::string &str );
-	size_t count( const std::string &str, const char ch );
+	std::vector<std::wstring> combineMissplittedColumns( const std::vector<std::wstring> &seperatedColumns );
+	void maskColumnNewlines( std::vector<std::wstring> &seperatedColumns );
+	void unMaskColumnNewlines( std::vector<std::wstring> &rows );
+	bool isValidQuoted( const std::wstring &str );
+	size_t count( const std::wstring &str, const wchar_t ch );
 	bool isEven( const int &num );
-	void setFullFileName( const std::string &fullFileName );
-	void setFileName( const std::string &fileName );
-	void setFilePath( const std::string &filePath );
-	std::vector<std::string> createRows( const std::vector<std::string> &seperatedColumns );
-	void maskColumnSeperators( std::vector<std::string> &rows );
-	void mapCSVData( const std::vector<std::string> &rows );
+	void setFullFileName( const std::wstring &fullFileName );
+	void setFileName( const std::wstring &fileName );
+	void setFilePath( const std::wstring &filePath );
+	std::vector<std::wstring> createRows( const std::vector<std::wstring> &seperatedColumns );
+	void maskColumnSeperators( std::vector<std::wstring> &rows );
+	void mapCSVData( const std::vector<std::wstring> &rows );
 	// ---
 
-	std::string fileName;
-	std::string filePath;
-	char seperator;
+	std::wstring fileName;
+	std::wstring filePath;
+	wchar_t seperator;
 	Matrix csvDataMatrix;
-	std::string seperatorMaskingStr;
+	std::wstring seperatorMaskingStr;
 };
 
 #endif // CSVPARSER_H
