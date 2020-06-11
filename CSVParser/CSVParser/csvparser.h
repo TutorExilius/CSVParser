@@ -27,6 +27,7 @@ class CSVParser
 public:
 	// defines ---
 	using Groups = std::unordered_map<std::wstring, std::vector<std::vector<std::wstring>>>;
+	using CountGroups = std::unordered_map<std::wstring, int>;
 	using Matrix = std::vector<std::vector<std::wstring>>;
 	// ---
 
@@ -53,6 +54,7 @@ public:
 	// Matrix Operations ---
 	std::vector<std::wstring> getColumnValues( const std::wstring &columnName ) const;
 	Groups groupByColumn( const std::wstring &columnName ) const;
+	CountGroups countedGroupsByColumn( const std::wstring &columnName ) const;
 	// ---
 
 private:

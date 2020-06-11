@@ -29,12 +29,7 @@ int main()
 	csvParser.parse( LR"(C:\Users\exi\Desktop\screenshots_and_csv\anonym\ano_2019__4_clusters.csv)" );
 	auto grouped{ csvParser.groupByColumn(L"Cluster")};
 
-	std::unordered_map<std::wstring, int> groups_count;
-
-	for( const auto &group : grouped )
-	{
-		groups_count[group.first] += group.second.size();
-	}
+	auto count_grouped{ csvParser.countedGroupsByColumn( L"Cluster" ) };
 
 	std::wofstream out{ LR"(C:\Users\twitch\Desktop\OUT.csv)" };
 

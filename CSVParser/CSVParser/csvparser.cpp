@@ -224,6 +224,18 @@ CSVParser::Groups CSVParser::groupByColumn( const std::wstring &columnName ) con
 	return groups;
 }
 
+CSVParser::CountGroups CSVParser::countedGroupsByColumn( const std::wstring &columnName ) const
+{
+	CountGroups groups_count;
+
+	for( const auto &group : this->groupByColumn(columnName) )
+	{
+		groups_count[group.first] += group.second.size();
+	}
+
+	return groups_count;
+}
+
 std::vector<std::wstring> CSVParser::combineMissplittedColumns( const std::vector<std::wstring> &seperatedColumns )
 {
 	std::vector<std::wstring> recombined;
