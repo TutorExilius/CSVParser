@@ -31,7 +31,7 @@ int main()
 
 	auto count_grouped{ csvParser.countedGroupsByColumn( "Cluster" ) };
 
-	std::ofstream out{ LR"(C:\Users\twitch\Desktop\OUT.csv)" };
+	std::ofstream out{ R"(C:\Users\twitch\Desktop\OUT.csv)" };
 
 	if( !out )
 		std::wcout << "nope";
