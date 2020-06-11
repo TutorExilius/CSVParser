@@ -34,7 +34,7 @@ int main()
 	std::ofstream out{ R"(C:\Users\twitch\Desktop\OUT.csv)" };
 
 	if( !out )
-		std::wcout << "nope";
+		std::cout << "nope";
 
 	out << csvParser.getCSVOutput();
 
