@@ -25,8 +25,8 @@ must be preserved.Contributors provide an express grant of patent rights.
 int main()
 {
 	CSVParser csvParser{ L';' };
-	csvParser.parse( LR"(file.csv)" );
-	auto columnvalues{ csvParser.getColumn(L"Cluster")};
+	csvParser.parse( LR"(C:\Users\exi\Desktop\screenshots_and_csv\anonym\ano_2019__4_clusters.csv)" );
+	auto columnvalues{ csvParser.getColumnValues(L"ooo")};
 
 	std::wofstream out{ LR"(C:\Users\twitch\Desktop\OUT.csv)" };
 

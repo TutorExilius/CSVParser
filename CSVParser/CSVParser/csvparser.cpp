@@ -19,6 +19,7 @@ must be preserved.Contributors provide an express grant of patent rights.
 
 #include "file_not_found_exception.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstring>
 #include <fstream>
@@ -188,26 +189,20 @@ wchar_t CSVParser::getSeperator() const
 	return this->seperator;
 }
 
-std::vector<std::wstring> CSVParser::getColumn( const std::wstring &columnName ) const
+std::vector<std::wstring> CSVParser::getColumnValues( const std::wstring &columnName ) const
 {
 	if( this->csvDataMatrix.size() == 0 )
 	{
 		return std::vector<std::wstring>{};
 	}
 
-	const auto itemIndex = [this, &columnName]() -> size_t const {
-		const auto columnNames{this->csvDataMatrix.at(0)};
-
-		for( size_t i=0; i< csvDataMatrix.size(); ++i )
-		{
-			if( columnName == columnNames.at(i) )
-			{
-				return i;
-			}
-		}
-	} ;
-
-	const size_t columnIndex{ itemIndex() };
+	const std::vector<std::wstring> columnNames( this->csvDataMatrix.at( 0 ) );
+	const auto columnIndexIt{ std::find(columnNames.cbegin(),
+										columnNames.cend(),
+										columnName) };
+	const size_t columnIndex{ static_cast<size_t>(
+		std::distance( columnNames.cbegin(), columnIndexIt )
+	) };
 
 	std::vector<std::wstring> columnValues;
 		

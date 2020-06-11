@@ -49,7 +49,7 @@ public:
 	wchar_t getSeperator() const;
 
 	// Matrix Operations ---
-	std::vector<std::wstring> getColumn( const std::wstring &columnName ) const;
+	std::vector<std::wstring> getColumnValues( const std::wstring &columnName ) const;
 	// ---
 
 private:
