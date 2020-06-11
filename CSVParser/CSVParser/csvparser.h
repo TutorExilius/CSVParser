@@ -48,6 +48,10 @@ public:
 	std::wstring getCSVOutput() const;
 	wchar_t getSeperator() const;
 
+	// Matrix Operations ---
+	std::vector<std::wstring> getColumn( const std::wstring &columnName ) const;
+	// ---
+
 private:
 	// deletes ---
 	CSVParser( const CSVParser &obj ) = delete;

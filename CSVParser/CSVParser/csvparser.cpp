@@ -188,6 +188,37 @@ wchar_t CSVParser::getSeperator() const
 	return this->seperator;
 }
 
+std::vector<std::wstring> CSVParser::getColumn( const std::wstring &columnName ) const
+{
+	if( this->csvDataMatrix.size() == 0 )
+	{
+		return std::vector<std::wstring>{};
+	}
+
+	const auto itemIndex = [this, &columnName]() -> size_t const {
+		const auto columnNames{this->csvDataMatrix.at(0)};
+
+		for( size_t i=0; i< csvDataMatrix.size(); ++i )
+		{
+			if( columnName == columnNames.at(i) )
+			{
+				return i;
+			}
+		}
+	} ;
+
+	const size_t columnIndex{ itemIndex() };
+
+	std::vector<std::wstring> columnValues;
+		
+	for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
+	{
+		columnValues.push_back( this->csvDataMatrix.at(i).at(columnIndex) );
+	}
+
+	return columnValues;
+}
+
 std::vector<std::wstring> CSVParser::combineMissplittedColumns( const std::vector<std::wstring> &seperatedColumns )
 {
 	std::vector<std::wstring> recombined;
