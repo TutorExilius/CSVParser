@@ -25,16 +25,16 @@ must be preserved.Contributors provide an express grant of patent rights.
 
 int main()
 {
-	CSVParser csvParser{ L';' };
-	csvParser.parse( LR"(C:\Users\exi\Desktop\screenshots_and_csv\anonym\ano_2019__4_clusters.csv)" );
-	auto grouped{ csvParser.groupByColumn(L"Cluster")};
+	CSVParser csvParser{ ';' };
+	csvParser.parse( R"(C:\Users\exi\Desktop\screenshots_and_csv\anonym\ano_2019__4_clusters.csv)" );
+	auto grouped{ csvParser.groupByColumn("Cluster")};
 
-	auto count_grouped{ csvParser.countedGroupsByColumn( L"Cluster" ) };
+	auto count_grouped{ csvParser.countedGroupsByColumn( "Cluster" ) };
 
-	std::wofstream out{ LR"(C:\Users\twitch\Desktop\OUT.csv)" };
+	std::ofstream out{ LR"(C:\Users\twitch\Desktop\OUT.csv)" };
 
 	if( !out )
-		std::wcout << L"nope";
+		std::wcout << "nope";
 
 	out << csvParser.getCSVOutput();
 

@@ -26,47 +26,47 @@ must be preserved.Contributors provide an express grant of patent rights.
 #include <sstream>
 
 // static ---
-std::wstring CSVParser::extractFileName( const std::wstring &fullFileName )
+std::string CSVParser::extractFileName( const std::string &fullFileName )
 {
-	std::wstring tmpFileName = CSVParser::replaceAll( fullFileName, L"/", L"\\" );
+	// std::string tmpFileName = CSVParser::replaceAll( fullFileName, "\\", "/" );
 
-	const size_t pos = tmpFileName.find_last_of( L'\\' );
+	const size_t pos = fullFileName.find_last_of( "/\\" );
 
-	if( pos != std::wstring::npos && pos + 1 < tmpFileName.size() )
+	if( pos != std::string::npos && pos + 1 < fullFileName.size() )
 	{
-		return std::move( tmpFileName.substr( pos + 1 ) );
+		return std::move( fullFileName.substr( pos + 1 ) );
 	}
-	else if( tmpFileName.size() > 0 )
+	else if( fullFileName.size() > 0 )
 	{
-		return tmpFileName;
+		return fullFileName;
 	}
 	else
 	{
-		return L"";
+		return "";
 	}
 }
 
-std::wstring CSVParser::extractFilePath( const std::wstring &fullFileName )
+std::string CSVParser::extractFilePath( const std::string &fullFileName )
 {
-	std::wstring tmpFileName = CSVParser::replaceAll( fullFileName, L"/", L"\\" );
+	//std::string tmpFileName = CSVParser::replaceAll( fullFileName, "\\", "/" );
 
-	const size_t pos = tmpFileName.find_last_of( '\\' );
+	const size_t pos = fullFileName.find_last_of( "/\\" );
 
-	if( pos != std::wstring::npos )
+	if( pos != std::string::npos )
 	{
-		return std::move( tmpFileName.substr( 0, pos + 1 ) );
+		return std::move( fullFileName.substr( 0, pos + 1 ) );
 	}
 	else
 	{
-		return L"";
+		return "";
 	}
 }
 
-std::wstring CSVParser::replaceAll( std::wstring str, const std::wstring &from, const std::wstring &to )
+std::string CSVParser::replaceAll( std::string str, const std::string &from, const std::string &to )
 {
 	size_t start_pos = 0;
 
-	while( ( start_pos = str.find( from, start_pos ) ) != std::wstring::npos )
+	while( ( start_pos = str.find( from, start_pos ) ) != std::string::npos )
 	{
 		str.replace( start_pos, from.size(), to );
 		start_pos += to.size();
@@ -75,11 +75,11 @@ std::wstring CSVParser::replaceAll( std::wstring str, const std::wstring &from, 
 	return std::move( str );
 }
 
-std::wstring CSVParser::generateRandomString( const size_t stringLength )
+std::string CSVParser::generateRandomString( const size_t stringLength )
 {
-	std::wstring maskingChars{ L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890" };
+	std::string maskingChars{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890" };
 
-	std::wstring str( stringLength, L'\0' );
+	std::string str( stringLength, '\0' );
 
 	for( size_t i = 0; i < stringLength; ++i )
 	{
@@ -91,30 +91,29 @@ std::wstring CSVParser::generateRandomString( const size_t stringLength )
 }
 // ---
 
-CSVParser::CSVParser( const wchar_t seperator )
+CSVParser::CSVParser( const char seperator )
 	: seperator{ seperator }
 {
 }
 
 CSVParser::~CSVParser() = default;
 
-void CSVParser::parse( const std::wstring &fullFileName )
+void CSVParser::parse( const std::string &fullFileName )
 {
 	this->setFullFileName( fullFileName );
 
-	std::wifstream inFile{ this->getFullFileName() };
+	std::ifstream inFile{ this->getFullFileName() };
 
 	if( !inFile )
 	{
-		const std::wstring w_msg{ this->getFullFileName() };
-		const std::string msg{ w_msg.cbegin(), w_msg.cend() };
+		const std::string msg{ this->getFullFileName() };
 
 		throw FileNotFoundException{ "Not found: '" + msg + "'" };
 	}
 
 	// read CSV File ---
-	std::vector<std::wstring> withSeperatorSeperatedData;
-	std::wstring seperatedColum;
+	std::vector<std::string> withSeperatorSeperatedData;
+	std::string seperatedColum;
 
 	while( std::getline( inFile, seperatedColum, this->seperator ) )
 	{
@@ -129,30 +128,30 @@ void CSVParser::parse( const std::wstring &fullFileName )
 	CSVParser::maskColumnNewlines( withSeperatorSeperatedData );
 	CSVParser::maskColumnSeperators( withSeperatorSeperatedData );
 
-	std::vector<std::wstring> rows = CSVParser::createRows( withSeperatorSeperatedData );
+	std::vector<std::string> rows = CSVParser::createRows( withSeperatorSeperatedData );
 
 	CSVParser::unMaskColumnNewlines( rows );
 
 	this->mapCSVData( rows );
 }
 
-void CSVParser::parse( const std::wstring &fullFileName, const wchar_t seperator )
+void CSVParser::parse( const std::string &fullFileName, const char seperator )
 {
 	this->seperator = seperator;
 	this->parse( fullFileName );
 }
 
-std::wstring CSVParser::getFileName() const
+std::string CSVParser::getFileName() const
 {
 	return this->fileName;
 }
 
-std::wstring CSVParser::getFilePath() const
+std::string CSVParser::getFilePath() const
 {
 	return this->filePath;
 }
 
-std::wstring CSVParser::getFullFileName() const
+std::string CSVParser::getFullFileName() const
 {
 	return this->getFilePath() + this->getFileName();
 }
@@ -162,9 +161,9 @@ const CSVParser::Matrix& CSVParser::getCSVMatrix() const
 	return this->csvDataMatrix;
 }
 
-std::wstring CSVParser::getCSVOutput() const
+std::string CSVParser::getCSVOutput() const
 {
-	std::wstringstream ss;
+	std::stringstream ss;
 
 	for( const auto &xVec : this->csvDataMatrix )
 	{
@@ -184,22 +183,22 @@ std::wstring CSVParser::getCSVOutput() const
 	return ss.str();
 }
 
-wchar_t CSVParser::getSeperator() const
+char CSVParser::getSeperator() const
 {
 	return this->seperator;
 }
 
-std::vector<std::wstring> CSVParser::getColumnValues( const std::wstring &columnName ) const
+std::vector<std::string> CSVParser::getColumnValues( const std::string &columnName ) const
 {
 	if( this->csvDataMatrix.size() == 0 )
 	{
-		return std::vector<std::wstring>{};
+		return std::vector<std::string>{};
 	}
 
-	const std::vector<std::wstring> columnNames( this->csvDataMatrix.at( 0 ) );
+	const std::vector<std::string> columnNames( this->csvDataMatrix.at( 0 ) );
 	const size_t columnIndex{ this->getColumnIndex( columnName ) };
 
-	std::vector<std::wstring> columnValues;
+	std::vector<std::string> columnValues;
 
 	for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
 	{
@@ -209,7 +208,7 @@ std::vector<std::wstring> CSVParser::getColumnValues( const std::wstring &column
 	return columnValues;
 }
 
-CSVParser::Groups CSVParser::groupByColumn( const std::wstring &columnName ) const
+CSVParser::Groups CSVParser::groupByColumn( const std::string &columnName ) const
 {
 	const size_t columnIndex{ this->getColumnIndex( columnName ) };
 
@@ -217,14 +216,14 @@ CSVParser::Groups CSVParser::groupByColumn( const std::wstring &columnName ) con
 
 	for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
 	{
-		const std::wstring key{ csvDataMatrix.at( i ).at( columnIndex ) };
+		const std::string key{ csvDataMatrix.at( i ).at( columnIndex ) };
 		groups[key].push_back( csvDataMatrix.at( i ) );
 	}
 
 	return groups;
 }
 
-CSVParser::CountGroups CSVParser::countedGroupsByColumn( const std::wstring &columnName ) const
+CSVParser::CountGroups CSVParser::countedGroupsByColumn( const std::string &columnName ) const
 {
 	CountGroups groups_count;
 
@@ -236,10 +235,10 @@ CSVParser::CountGroups CSVParser::countedGroupsByColumn( const std::wstring &col
 	return groups_count;
 }
 
-std::vector<std::wstring> CSVParser::combineMissplittedColumns( const std::vector<std::wstring> &seperatedColumns )
+std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector<std::string> &seperatedColumns )
 {
-	std::vector<std::wstring> recombined;
-	std::wstring data;
+	std::vector<std::string> recombined;
+	std::string data;
 
 	bool combineMode = false;
 
@@ -294,25 +293,25 @@ std::vector<std::wstring> CSVParser::combineMissplittedColumns( const std::vecto
 	return std::move( recombined );
 }
 
-void CSVParser::maskColumnNewlines( std::vector<std::wstring> &seperatedColumns )
+void CSVParser::maskColumnNewlines( std::vector<std::string> &seperatedColumns )
 {
 	for( auto &column : seperatedColumns )
 	{
 		if( column.size() >= 2 )
 		{
-			auto startDoubleQuote = column.find_first_of( L'\"' );
-			auto endDoubleQuote = column.find_last_of( L'\"' );
+			auto startDoubleQuote = column.find_first_of( '\"' );
+			auto endDoubleQuote = column.find_last_of( '\"' );
 
 			if( startDoubleQuote != std::string::npos && endDoubleQuote != std::string::npos &&
 				startDoubleQuote < endDoubleQuote )
 			{
-				if( CSVParser::count( column, L'\"' ) > 2 )
+				if( CSVParser::count( column, '\"' ) > 2 )
 				{
-					endDoubleQuote = column.substr( 0, endDoubleQuote - 1 ).find_last_of( L'\"' );
+					endDoubleQuote = column.substr( 0, endDoubleQuote - 1 ).find_last_of( '\"' );
 				}
 
-				std::wstring tmp = column.substr( startDoubleQuote, endDoubleQuote - startDoubleQuote );
-				tmp = CSVParser::replaceAll( tmp, L"\n", L"\\n" );
+				std::string tmp = column.substr( startDoubleQuote, endDoubleQuote - startDoubleQuote );
+				tmp = CSVParser::replaceAll( tmp, "\n", "\\n" );
 
 				column = column.replace( startDoubleQuote, endDoubleQuote - startDoubleQuote, tmp );
 			}
@@ -320,17 +319,17 @@ void CSVParser::maskColumnNewlines( std::vector<std::wstring> &seperatedColumns 
 	}
 }
 
-void CSVParser::unMaskColumnNewlines( std::vector<std::wstring> &rows )
+void CSVParser::unMaskColumnNewlines( std::vector<std::string> &rows )
 {
 	for( auto &row : rows )
 	{
-		row = CSVParser::replaceAll( row, L"\\n", L"\n" );
+		row = CSVParser::replaceAll( row, "\\n", "\n" );
 	}
 }
 
-bool CSVParser::isValidQuoted( const std::wstring &str )
+bool CSVParser::isValidQuoted( const std::string &str )
 {
-	size_t cnt = CSVParser::count( str, L'\"' );
+	size_t cnt = CSVParser::count( str, '\"' );
 
 	if( CSVParser::isEven( static_cast<int>( cnt ) ) )
 	{
@@ -342,7 +341,7 @@ bool CSVParser::isValidQuoted( const std::wstring &str )
 	}
 }
 
-size_t CSVParser::count( const std::wstring &str, const wchar_t ch )
+size_t CSVParser::count( const std::string &str, const char ch )
 {
 	size_t cnt = 0;
 
@@ -362,26 +361,26 @@ bool CSVParser::isEven( const int &num )
 	return ( num % 2 == 0 );
 }
 
-void CSVParser::setFullFileName( const std::wstring &fullFileName )
+void CSVParser::setFullFileName( const std::string &fullFileName )
 {
 	this->setFileName( CSVParser::extractFileName( fullFileName ) );
 	this->setFilePath( CSVParser::extractFilePath( fullFileName ) );
 }
 
-void CSVParser::setFileName( const std::wstring &fileName )
+void CSVParser::setFileName( const std::string &fileName )
 {
 	this->fileName = fileName;
 }
 
-void CSVParser::setFilePath( const std::wstring &filePath )
+void CSVParser::setFilePath( const std::string &filePath )
 {
 	this->filePath = filePath;
 }
 
-std::vector<std::wstring> CSVParser::createRows( const std::vector<std::wstring> &seperatedColumns )
+std::vector<std::string> CSVParser::createRows( const std::vector<std::string> &seperatedColumns )
 {
-	std::vector<std::wstring> rows;
-	std::wstringstream ss;
+	std::vector<std::string> rows;
+	std::stringstream ss;
 
 	size_t cnt = 0;
 	for( const auto &column : seperatedColumns )
@@ -394,7 +393,7 @@ std::vector<std::wstring> CSVParser::createRows( const std::vector<std::wstring>
 		}
 	}
 
-	std::wstring row;
+	std::string row;
 	while( std::getline( ss, row ) )
 	{
 		rows.push_back( row );
@@ -403,7 +402,7 @@ std::vector<std::wstring> CSVParser::createRows( const std::vector<std::wstring>
 	return std::move( rows );
 }
 
-void CSVParser::maskColumnSeperators( std::vector<std::wstring> &rows )
+void CSVParser::maskColumnSeperators( std::vector<std::string> &rows )
 {
 	// find masking string, that can be used as seperator-masker ---
 	bool foundUniqueString = false;
@@ -411,12 +410,12 @@ void CSVParser::maskColumnSeperators( std::vector<std::wstring> &rows )
 	size_t generateStrLenght = 3;
 	do
 	{
-		const std::wstring randomString = CSVParser::generateRandomString( generateStrLenght );
+		const std::string randomString = CSVParser::generateRandomString( generateStrLenght );
 
 		// 
 		for( const auto &row : rows )
 		{
-			if( row.find( randomString ) != std::wstring::npos )
+			if( row.find( randomString ) != std::string::npos )
 			{
 				// found unique string in row, so break loop and generate new string
 				break;
@@ -432,11 +431,11 @@ void CSVParser::maskColumnSeperators( std::vector<std::wstring> &rows )
 
 	for( auto &row : rows )
 	{
-		row = CSVParser::replaceAll( row, std::wstring{ this->seperator }, this->seperatorMaskingStr );
+		row = CSVParser::replaceAll( row, std::string{ this->seperator }, this->seperatorMaskingStr );
 	}
 }
 
-void CSVParser::mapCSVData( const std::vector<std::wstring> &rows )
+void CSVParser::mapCSVData( const std::vector<std::string> &rows )
 {
 	size_t rowsCnt = 0;
 	size_t cntColumnTitles = 0;
@@ -445,13 +444,13 @@ void CSVParser::mapCSVData( const std::vector<std::wstring> &rows )
 	{
 		++rowsCnt;
 
-		std::wstringstream ss{ row };
-		std::vector<std::wstring> columns;
+		std::stringstream ss{ row };
+		std::vector<std::string> columns;
 
-		std::wstring column;
+		std::string column;
 		while( std::getline( ss, column, this->seperator ) )
 		{
-			column = CSVParser::replaceAll( column, this->seperatorMaskingStr, std::wstring{ this->seperator } );
+			column = CSVParser::replaceAll( column, this->seperatorMaskingStr, std::string{ this->seperator } );
 			columns.push_back( column );
 		}
 
@@ -477,9 +476,9 @@ void CSVParser::mapCSVData( const std::vector<std::wstring> &rows )
 	}
 }
 
-size_t CSVParser::getColumnIndex( const std::wstring &columnName ) const
+size_t CSVParser::getColumnIndex( const std::string &columnName ) const
 {
-	const std::vector<std::wstring> columnNames( this->csvDataMatrix.at( 0 ) );
+	const std::vector<std::string> columnNames( this->csvDataMatrix.at( 0 ) );
 	const auto columnIndexIt{ std::find(columnNames.cbegin(),
 										columnNames.cend(),
 										columnName) };
