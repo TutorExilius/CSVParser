@@ -19,12 +19,14 @@ must be preserved.Contributors provide an express grant of patent rights.
 #define CSVPARSER_H
 
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class CSVParser
 {
 public:
 	// defines ---
+	using Groups = std::unordered_map<std::wstring, std::vector<std::vector<std::wstring>>>;
 	using Matrix = std::vector<std::vector<std::wstring>>;
 	// ---
 
@@ -50,6 +52,7 @@ public:
 
 	// Matrix Operations ---
 	std::vector<std::wstring> getColumnValues( const std::wstring &columnName ) const;
+	Groups groupByColumn( const std::wstring &columnName ) const;
 	// ---
 
 private:
@@ -73,6 +76,7 @@ private:
 	std::vector<std::wstring> createRows( const std::vector<std::wstring> &seperatedColumns );
 	void maskColumnSeperators( std::vector<std::wstring> &rows );
 	void mapCSVData( const std::vector<std::wstring> &rows );
+	size_t getColumnIndex( const std::wstring &columnName ) const;
 	// ---
 
 	std::wstring fileName;

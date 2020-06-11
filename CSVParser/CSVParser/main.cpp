@@ -14,7 +14,8 @@ must be preserved.Contributors provide an express grant of patent rights.
 
 */
 
-
+#include <algorithm>
+#include <numeric>
 #include <iostream>
 #include <string>
 
@@ -26,7 +27,14 @@ int main()
 {
 	CSVParser csvParser{ L';' };
 	csvParser.parse( LR"(C:\Users\exi\Desktop\screenshots_and_csv\anonym\ano_2019__4_clusters.csv)" );
-	auto columnvalues{ csvParser.getColumnValues(L"ooo")};
+	auto grouped{ csvParser.groupByColumn(L"Cluster")};
+
+	std::unordered_map<std::wstring, int> groups_count;
+
+	for( const auto &group : grouped )
+	{
+		groups_count[group.first] += group.second.size();
+	}
 
 	std::wofstream out{ LR"(C:\Users\twitch\Desktop\OUT.csv)" };
 

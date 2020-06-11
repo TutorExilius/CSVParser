@@ -197,21 +197,31 @@ std::vector<std::wstring> CSVParser::getColumnValues( const std::wstring &column
 	}
 
 	const std::vector<std::wstring> columnNames( this->csvDataMatrix.at( 0 ) );
-	const auto columnIndexIt{ std::find(columnNames.cbegin(),
-										columnNames.cend(),
-										columnName) };
-	const size_t columnIndex{ static_cast<size_t>(
-		std::distance( columnNames.cbegin(), columnIndexIt )
-	) };
+	const size_t columnIndex{ this->getColumnIndex( columnName ) };
 
 	std::vector<std::wstring> columnValues;
-		
+
 	for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
 	{
 		columnValues.push_back( this->csvDataMatrix.at(i).at(columnIndex) );
 	}
 
 	return columnValues;
+}
+
+CSVParser::Groups CSVParser::groupByColumn( const std::wstring &columnName ) const
+{
+	const size_t columnIndex{ this->getColumnIndex( columnName ) };
+
+	Groups groups;
+
+	for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
+	{
+		const std::wstring key{ csvDataMatrix.at( i ).at( columnIndex ) };
+		groups[key].push_back( csvDataMatrix.at( i ) );
+	}
+
+	return groups;
 }
 
 std::vector<std::wstring> CSVParser::combineMissplittedColumns( const std::vector<std::wstring> &seperatedColumns )
@@ -453,4 +463,17 @@ void CSVParser::mapCSVData( const std::vector<std::wstring> &rows )
 	{
 		throw "ColumTitles not found!";
 	}
+}
+
+size_t CSVParser::getColumnIndex( const std::wstring &columnName ) const
+{
+	const std::vector<std::wstring> columnNames( this->csvDataMatrix.at( 0 ) );
+	const auto columnIndexIt{ std::find(columnNames.cbegin(),
+										columnNames.cend(),
+										columnName) };
+	const size_t columnIndex{ static_cast<size_t>(
+		std::distance( columnNames.cbegin(), columnIndexIt )
+	) };
+
+	return columnIndex;
 }
