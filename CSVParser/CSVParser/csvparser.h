@@ -27,7 +27,7 @@ class CSVParser
 public:
 	// defines ---
 	using Groups = std::unordered_map<std::string, std::vector<std::vector<std::string>>>;
-	using CountGroups = std::unordered_map<std::string, int>;
+	using CountGroups = std::unordered_map<std::string, size_t>;
 	using Matrix = std::vector<std::vector<std::string>>;
 	// ---
 

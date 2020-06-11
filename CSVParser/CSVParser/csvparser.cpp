@@ -34,7 +34,7 @@ std::string CSVParser::extractFileName( const std::string &fullFileName )
 
 	if( pos != std::string::npos && pos + 1 < fullFileName.size() )
 	{
-		return std::move( fullFileName.substr( pos + 1 ) );
+		return fullFileName.substr( pos + 1 );
 	}
 	else if( fullFileName.size() > 0 )
 	{
@@ -54,7 +54,7 @@ std::string CSVParser::extractFilePath( const std::string &fullFileName )
 
 	if( pos != std::string::npos )
 	{
-		return std::move( fullFileName.substr( 0, pos + 1 ) );
+		return fullFileName.substr( 0, pos + 1 );
 	}
 	else
 	{
@@ -72,7 +72,7 @@ std::string CSVParser::replaceAll( std::string str, const std::string &from, con
 		start_pos += to.size();
 	}
 
-	return std::move( str );
+	return str;
 }
 
 std::string CSVParser::generateRandomString( const size_t stringLength )
@@ -168,7 +168,7 @@ std::string CSVParser::getCSVOutput() const
 	for( const auto &xVec : this->csvDataMatrix )
 	{
 		size_t cntColumn = 0;
-		for( const auto yVec : xVec )
+		for( const auto &yVec : xVec )
 		{
 			ss << yVec;
 
@@ -242,7 +242,7 @@ std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector
 
 	bool combineMode = false;
 
-	for( const auto column : seperatedColumns )
+	for( const auto &column : seperatedColumns )
 	{
 		bool isValid = CSVParser::isValidQuoted( column );
 
@@ -290,7 +290,7 @@ std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector
 		recombined.push_back( data );
 	}
 
-	return std::move( recombined );
+	return recombined;
 }
 
 void CSVParser::maskColumnNewlines( std::vector<std::string> &seperatedColumns )
@@ -399,7 +399,7 @@ std::vector<std::string> CSVParser::createRows( const std::vector<std::string> &
 		rows.push_back( row );
 	}
 
-	return std::move( rows );
+	return rows;
 }
 
 void CSVParser::maskColumnSeperators( std::vector<std::string> &rows )
@@ -459,7 +459,7 @@ void CSVParser::mapCSVData( const std::vector<std::string> &rows )
 			cntColumnTitles = columns.size();
 		}
 
-		csvDataMatrix.emplace_back( std::move( columns ) );
+		csvDataMatrix.push_back( columns );
 	}
 
 	if( cntColumnTitles > 0 )
