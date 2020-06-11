@@ -75,7 +75,7 @@ std::string CSVParser::replaceAll( std::string str, const std::string &from, con
 	return str;
 }
 
-std::string CSVParser::generateRandomString( const size_t stringLength )
+std::string CSVParser::generateRandomString( const size_t &stringLength )
 {
 	std::string maskingChars{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890" };
 
@@ -83,7 +83,7 @@ std::string CSVParser::generateRandomString( const size_t stringLength )
 
 	for( size_t i = 0; i < stringLength; ++i )
 	{
-		const size_t randIndex = std::rand() % maskingChars.size();
+		const size_t randIndex = static_cast<size_t>(std::rand()) % maskingChars.size();
 		str[i] = maskingChars[randIndex];
 	}
 
@@ -91,7 +91,7 @@ std::string CSVParser::generateRandomString( const size_t stringLength )
 }
 // ---
 
-CSVParser::CSVParser( const char seperator )
+CSVParser::CSVParser( const char &seperator )
 	: seperator{ seperator }
 {
 }

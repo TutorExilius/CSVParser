@@ -35,10 +35,10 @@ public:
 	static std::string extractFileName( const std::string &fullFileName );
 	static std::string extractFilePath( const std::string &fullFileName );
 	static std::string replaceAll( std::string str, const std::string &from, const std::string &to );
-	static std::string generateRandomString( const size_t stringLength );
+	static std::string generateRandomString( const size_t &stringLength );
 	// ---
 
-	CSVParser( const char seperator = ';' );
+	CSVParser( const char &seperator = ';' );
 	virtual ~CSVParser();
 
 	void parse( const std::string &fullFileName );
