@@ -214,9 +214,6 @@ CSVParser::Groups CSVParser::groupByColumn( const std::string &columnName ) cons
 
 	Groups groups;
 
-	// add column titles 
-	groups["columns"].push_back( csvDataMatrix.at( 0 ) );
-
 	for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
 	{
 		const std::string key{ csvDataMatrix.at( i ).at( columnIndex ) };
@@ -237,6 +234,11 @@ CSVParser::CountGroups CSVParser::countedGroupsByColumn( const std::string &colu
 	}
 
 	return groups_count;
+}
+
+std::vector<std::string> CSVParser::getColumnNames() const
+{
+	return this->csvDataMatrix.at( 0 );
 }
 
 std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector<std::string> &seperatedColumns )

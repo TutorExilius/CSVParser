@@ -55,6 +55,7 @@ public:
 	std::vector<std::string> getColumnValues( const std::string &columnName ) const;
 	Groups groupByColumn( const std::string &columnName ) const;
 	CountGroups countedGroupsByColumn( const std::string &columnName ) const;
+	std::vector<std::string> getColumnNames() const;
 	// ---
 
 private:
