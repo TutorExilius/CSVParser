@@ -26,19 +26,9 @@ must be preserved.Contributors provide an express grant of patent rights.
 int main()
 {
 	CSVParser csvParser{ ';' };
-	csvParser.parse( R"(C:\Users\exi\Desktop\screenshots_and_csv\anonym\ano_2019__4_clusters.csv)" );
+	csvParser.parse( R"(C:\Users\exi\Desktop\screenshots_and_csv\real\browser_2019__4_clusters.csv)" );
+	
 	auto grouped{ csvParser.groupByColumn("Cluster")};
-
-	auto count_grouped{ csvParser.countedGroupsByColumn( "Cluster" ) };
-
-	std::ofstream out{ R"(C:\Users\twitch\Desktop\OUT.csv)" };
-
-	if( !out )
-		std::cout << "nope";
-
-	out << csvParser.getCSVOutput();
-
-	out.close();
 
 	system( "PAUSE" );
 	return 0;

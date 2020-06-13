@@ -214,9 +214,13 @@ CSVParser::Groups CSVParser::groupByColumn( const std::string &columnName ) cons
 
 	Groups groups;
 
+	// add column titles 
+	groups["columns"].push_back( csvDataMatrix.at( 0 ) );
+
 	for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
 	{
 		const std::string key{ csvDataMatrix.at( i ).at( columnIndex ) };
+
 		groups[key].push_back( csvDataMatrix.at( i ) );
 	}
 
