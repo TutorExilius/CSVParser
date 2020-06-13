@@ -241,6 +241,25 @@ std::vector<std::string> CSVParser::getColumnNames() const
 	return this->csvDataMatrix.at( 0 );
 }
 
+void CSVParser::insertColumn( const std::string &columnName, const std::string &defaultValue )
+{
+	if( this->csvDataMatrix.empty() )
+	{
+		// TODO: warn, that first column is created and no values inserted (default-Value is ignored in that case)
+		// create first, empty row
+		this->csvDataMatrix.push_back( std::vector<std::string>{} );
+	}
+		
+	this->csvDataMatrix.at( 0 ).push_back( columnName );
+
+	std::for_each( this->csvDataMatrix.begin() + 1,
+				   this->csvDataMatrix.end(),
+				   [&defaultValue](std::vector<std::string> &row) {
+					   row.push_back( defaultValue );
+				   }
+	);
+}
+
 std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector<std::string> &seperatedColumns )
 {
 	std::vector<std::string> recombined;
