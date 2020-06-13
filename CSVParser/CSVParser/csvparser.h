@@ -3,7 +3,7 @@
 Author:			Tutor Exilius (http://www.exilius.de)
 
 Created:		12.10.2018
-Last update:		11.06.2020
+Last update:		13.06.2020
 
 GNU General Public License v3.0
 
