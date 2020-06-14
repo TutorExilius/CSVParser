@@ -260,6 +260,30 @@ void CSVParser::insertColumn( const std::string &columnName, const std::string &
 	);
 }
 
+bool CSVParser::isUnique( const std::string &columnName )
+{
+	bool columname_exists = false;
+	bool unique = true;
+
+	const auto pos = std::find( this->csvDataMatrix.at( 0 ).cbegin(),
+								this->csvDataMatrix.at( 0 ).cend(),
+								columnName );
+
+	if( pos != this->csvDataMatrix.at( 0 ).end() )
+	{
+		const auto double_pos = std::find( pos + 1,
+										   this->csvDataMatrix.at( 0 ).cend(),
+										   columnName );
+
+		const bool is_double = double_pos != this->csvDataMatrix.at( 0 ).end();
+		return !is_double;
+	}
+	else
+	{
+		throw ColumnNotFound{ columnName + " not found" };
+	}
+}
+
 std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector<std::string> &seperatedColumns )
 {
 	std::vector<std::string> recombined;

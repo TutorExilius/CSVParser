@@ -18,9 +18,23 @@ must be preserved.Contributors provide an express grant of patent rights.
 #ifndef CSVPARSER_H
 #define CSVPARSER_H
 
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+// EXCEPTIONS ---
+
+class ColumnNotFound : virtual public std::runtime_error
+{
+public:
+	ColumnNotFound( const std::string &msg )
+	: std::runtime_error( msg )
+	{
+	}
+};
+
+// ---
 
 class CSVParser
 {
@@ -57,6 +71,7 @@ public:
 	CountGroups countedGroupsByColumn( const std::string &columnName ) const;
 	std::vector<std::string> getColumnNames() const;
 	void insertColumn( const std::string &columnName, const std::string &defaultValue = std::string{} );
+	bool isUnique( const std::string &columnName );
 	// ---
 
 private:
