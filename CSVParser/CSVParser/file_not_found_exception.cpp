@@ -18,11 +18,11 @@ must be preserved.Contributors provide an express grant of patent rights.
 #include "file_not_found_exception.h"
 
 FileNotFoundException::FileNotFoundException( const std::string &errorMessage )
-	: errorMessage{ errorMessage }
+    : errorMessage{ errorMessage }
 {
 }
 
-const char* FileNotFoundException::what() const noexcept
+const char *FileNotFoundException::what() const noexcept
 {
-	return this->errorMessage.c_str();
+    return this->errorMessage.c_str();
 }

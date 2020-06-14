@@ -3,7 +3,7 @@
 Author:			Tutor Exilius (http://www.exilius.de)
 
 Created:		12.10.2018
-Last update:		13.06.2020
+Last update:		14.06.2020
 
 GNU General Public License v3.0
 
@@ -28,10 +28,10 @@ must be preserved.Contributors provide an express grant of patent rights.
 class ColumnNotFound : virtual public std::runtime_error
 {
 public:
-	ColumnNotFound( const std::string &msg )
-	: std::runtime_error( msg )
-	{
-	}
+    ColumnNotFound( const std::string &msg )
+    : std::runtime_error( msg )
+    {
+    }
 };
 
 // ---
@@ -39,70 +39,70 @@ public:
 class CSVParser
 {
 public:
-	// defines ---
-	using Groups = std::unordered_map<std::string, std::vector<std::vector<std::string>>>;
-	using CountGroups = std::unordered_map<std::string, size_t>;
-	using Matrix = std::vector<std::vector<std::string>>;
-	// ---
+    // defines ---
+    using Groups = std::unordered_map<std::string, std::vector<std::vector<std::string>>>;
+    using CountGroups = std::unordered_map<std::string, size_t>;
+    using Matrix = std::vector<std::vector<std::string>>;
+    // ---
 
-	// static ---
-	static std::string extractFileName( const std::string &fullFileName );
-	static std::string extractFilePath( const std::string &fullFileName );
-	static std::string replaceAll( std::string str, const std::string &from, const std::string &to );
-	static std::string generateRandomString( const size_t &stringLength );
-	// ---
+    // static ---
+    static std::string extractFileName( const std::string &fullFileName );
+    static std::string extractFilePath( const std::string &fullFileName );
+    static std::string replaceAll( std::string str, const std::string &from, const std::string &to );
+    static std::string generateRandomString( const size_t &stringLength );
+    // ---
 
-	CSVParser( const char &seperator = ';' );
-	virtual ~CSVParser();
+    CSVParser( const char &seperator = ';' );
+    virtual ~CSVParser();
 
-	void parse( const std::string &fullFileName );
-	void parse( const std::string &fullFileName, const char seperator );
+    void parse( const std::string &fullFileName );
+    void parse( const std::string &fullFileName, const char seperator );
 
-	std::string getFileName() const;
-	std::string getFilePath() const;
-	std::string getFullFileName() const;
-	const Matrix& getCSVMatrix() const;
-	std::string getCSVOutput() const;
-	char getSeperator() const;
+    std::string getFileName() const;
+    std::string getFilePath() const;
+    std::string getFullFileName() const;
+    const Matrix &getCSVMatrix() const;
+    std::string getCSVOutput() const;
+    char getSeperator() const;
 
-	// Matrix Operations ---
-	std::vector<std::string> getColumnValues( const std::string &columnName ) const;
-	Groups groupByColumn( const std::string &columnName ) const;
-	CountGroups countedGroupsByColumn( const std::string &columnName ) const;
-	std::vector<std::string> getColumnNames() const;
-	void insertColumn( const std::string &columnName, const std::string &defaultValue = std::string{} );
-	bool isUnique( const std::string &columnName );
-	// ---
+    // Matrix Operations ---
+    std::vector<std::string> getColumnValues( const std::string &columnName ) const;
+    Groups groupByColumn( const std::string &columnName ) const;
+    CountGroups countedGroupsByColumn( const std::string &columnName ) const;
+    std::vector<std::string> getColumnNames() const;
+    void insertColumn( const std::string &columnName, const std::string &defaultValue = std::string{} );
+    bool isUnique( const std::string &columnName );
+    // ---
 
 private:
-	// deletes ---
-	CSVParser( const CSVParser &obj ) = delete;
-	CSVParser( CSVParser &&obj ) = delete;
-	CSVParser& operator=( const CSVParser &obj ) = delete;
-	CSVParser& operator=( CSVParser &&obj ) = delete;
-	// ---
+    // deletes ---
+    CSVParser( const CSVParser &obj ) = delete;
+    CSVParser( CSVParser &&obj ) = delete;
+    CSVParser &operator=( const CSVParser &obj ) = delete;
+    CSVParser &operator=( CSVParser &&obj ) = delete;
+    // ---
 
-	// helper-methods ---
-	std::vector<std::string> combineMissplittedColumns( const std::vector<std::string> &seperatedColumns );
-	void maskColumnNewlines( std::vector<std::string> &seperatedColumns );
-	void unMaskColumnNewlines( std::vector<std::string> &rows );
-	bool isValidQuoted( const std::string &str );
-	size_t count( const std::string &str, const char ch );
-	bool isEven( const int &num );
-	void setFullFileName( const std::string &fullFileName );
-	void setFileName( const std::string &fileName );
-	void setFilePath( const std::string &filePath );
-	std::vector<std::string> createRows( const std::vector<std::string> &seperatedColumns );
-	void maskColumnSeperators( std::vector<std::string> &rows );
-	void mapCSVData( const std::vector<std::string> &rows );
-	size_t getColumnIndex( const std::string &columnName ) const;
-	// ---
+    // helper-methods ---
+    std::vector<std::string> combineMissplittedColumns( const std::vector<std::string> &seperatedColumns );
+    void maskColumnNewlines( std::vector<std::string> &seperatedColumns );
+    void unMaskColumnNewlines( std::vector<std::string> &rows );
+    bool isValidQuoted( const std::string &str );
+    size_t count( const std::string &str, const char ch );
+    bool isEven( const int &num );
+    void setFullFileName( const std::string &fullFileName );
+    void setFileName( const std::string &fileName );
+    void setFilePath( const std::string &filePath );
+    std::vector<std::string> createRows( const std::vector<std::string> &seperatedColumns );
+    void maskColumnSeperators( std::vector<std::string> &rows );
+    void mapCSVData( const std::vector<std::string> &rows );
+    size_t getColumnIndex( const std::string &columnName ) const;
+    // ---
 
-	std::string fileName;
-	std::string filePath;
-	char seperator;
-	Matrix csvDataMatrix;
-	std::string seperatorMaskingStr;
+    std::string fileName;
+    std::string filePath;
+    char seperator;
+    Matrix csvDataMatrix;
+    std::string seperatorMaskingStr;
 };
 
 #endif // CSVPARSER_H

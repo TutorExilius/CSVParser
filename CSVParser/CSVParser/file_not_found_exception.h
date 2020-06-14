@@ -24,12 +24,12 @@ must be preserved.Contributors provide an express grant of patent rights.
 class FileNotFoundException final : public std::exception
 {
 public:
-	explicit FileNotFoundException( const std::string &errorMessage );
+    explicit FileNotFoundException( const std::string &errorMessage );
 
-	const char* what() const noexcept override;
+    const char *what() const noexcept override;
 
 private:
-	std::string errorMessage;
+    std::string errorMessage;
 };
 
 #endif // FILENOTFOUNDEXCEPTION_H
