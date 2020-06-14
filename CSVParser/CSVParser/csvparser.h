@@ -36,7 +36,7 @@ public:
 
 // ---
 
-class CSVParser
+class CSVParser final
 {
 public:
     // defines ---
@@ -53,7 +53,7 @@ public:
     // ---
 
     CSVParser( const char &seperator = ';' );
-    virtual ~CSVParser();
+    ~CSVParser() = default;
 
     void parse( const std::string &fullFileName );
     void parse( const std::string &fullFileName, const char seperator );
@@ -76,10 +76,11 @@ public:
 
 private:
     // deletes ---
+    CSVParser() = delete;
     CSVParser( const CSVParser &obj ) = delete;
     CSVParser( CSVParser &&obj ) = delete;
-    CSVParser &operator=( const CSVParser &obj ) = delete;
-    CSVParser &operator=( CSVParser &&obj ) = delete;
+    CSVParser& operator=( const CSVParser &obj ) = delete;
+    CSVParser& operator=( CSVParser &&obj ) = delete;
     // ---
 
     // helper-methods ---
@@ -87,8 +88,6 @@ private:
     void maskColumnNewlines( std::vector<std::string> &seperatedColumns );
     void unMaskColumnNewlines( std::vector<std::string> &rows );
     bool isValidQuoted( const std::string &str );
-    size_t count( const std::string &str, const char ch );
-    bool isEven( const int &num );
     void setFullFileName( const std::string &fullFileName );
     void setFileName( const std::string &fileName );
     void setFilePath( const std::string &filePath );
@@ -96,6 +95,7 @@ private:
     void maskColumnSeperators( std::vector<std::string> &rows );
     void mapCSVData( const std::vector<std::string> &rows );
     size_t getColumnIndex( const std::string &columnName ) const;
+    void reduceDataRows();
     // ---
 
     std::string fileName;

@@ -23,6 +23,7 @@ must be preserved.Contributors provide an express grant of patent rights.
 #include <cmath>
 #include <cstring>
 #include <fstream>
+#include <iterator>
 #include <sstream>
 
 // static ---
@@ -92,11 +93,9 @@ std::string CSVParser::generateRandomString( const size_t &stringLength )
 // ---
 
 CSVParser::CSVParser( const char &seperator )
-    : seperator{ seperator }
+: seperator{ seperator }
 {
 }
-
-CSVParser::~CSVParser() = default;
 
 void CSVParser::parse( const std::string &fullFileName )
 {
@@ -354,7 +353,7 @@ void CSVParser::maskColumnNewlines( std::vector<std::string> &seperatedColumns )
             if( startDoubleQuote != std::string::npos && endDoubleQuote != std::string::npos &&
                 startDoubleQuote < endDoubleQuote )
             {
-                if( CSVParser::count( column, '\"' ) > 2 )
+                if( std::count( column.cbegin(), column.cend(), '\"' ) > 2 )
                 {
                     endDoubleQuote = column.substr( 0, endDoubleQuote - 1 ).find_last_of( '\"' );
                 }
@@ -378,36 +377,8 @@ void CSVParser::unMaskColumnNewlines( std::vector<std::string> &rows )
 
 bool CSVParser::isValidQuoted( const std::string &str )
 {
-    size_t cnt = CSVParser::count( str, '\"' );
-
-    if( CSVParser::isEven( static_cast<int>( cnt ) ) )
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-size_t CSVParser::count( const std::string &str, const char ch )
-{
-    size_t cnt = 0;
-
-    for( const auto &c : str )
-    {
-        if( ch == c )
-        {
-            ++cnt;
-        }
-    }
-
-    return cnt;
-}
-
-bool CSVParser::isEven( const int &num )
-{
-    return ( num % 2 == 0 );
+    const size_t cnt = std::count( str.cbegin(), str.cend(), '\"' );
+    return (cnt % 2 == 0);
 }
 
 void CSVParser::setFullFileName( const std::string &fullFileName )
@@ -486,13 +457,10 @@ void CSVParser::maskColumnSeperators( std::vector<std::string> &rows )
 
 void CSVParser::mapCSVData( const std::vector<std::string> &rows )
 {
-    size_t rowsCnt = 0;
     size_t cntColumnTitles = 0;
 
     for( const auto &row : rows )
     {
-        ++rowsCnt;
-
         std::stringstream ss{ row };
         std::vector<std::string> columns;
 
@@ -503,37 +471,41 @@ void CSVParser::mapCSVData( const std::vector<std::string> &rows )
             columns.push_back( column );
         }
 
-        if( rowsCnt == 1 )
-        {
-            cntColumnTitles = columns.size();
-        }
-
         csvDataMatrix.push_back( columns );
     }
 
-    if( cntColumnTitles > 0 )
-    {
-        // resize vectors to column-title length
-        for( auto &xVec : this->csvDataMatrix )
-        {
-            xVec.resize( cntColumnTitles );
-        }
-    }
-    else
-    {
-        throw "ColumTitles not found!";
-    }
+    this->reduceDataRows();
 }
 
 size_t CSVParser::getColumnIndex( const std::string &columnName ) const
 {
     const std::vector<std::string> columnNames( this->csvDataMatrix.at( 0 ) );
     const auto columnIndexIt{ std::find( columnNames.cbegin(),
-                                        columnNames.cend(),
-                                        columnName ) };
+                                         columnNames.cend(),
+                                         columnName ) };
     const size_t columnIndex{ static_cast<size_t>(
         std::distance( columnNames.cbegin(), columnIndexIt )
     ) };
 
     return columnIndex;
+}
+
+void CSVParser::reduceDataRows()
+{
+    // resize vectors to column-title length
+
+    const size_t cntColumns = this->getColumnNames().size();
+    
+    if( cntColumns > 0 )
+    {
+        for( auto &row : this->csvDataMatrix )
+        {
+            row.resize( cntColumns );
+        }
+    }
+    else
+    {
+        // TODO: throw column len exception
+        // throw ...
+    }
 }
