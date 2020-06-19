@@ -79,7 +79,6 @@ std::string CSVParser::replaceAll( std::string str, const std::string &from, con
 std::string CSVParser::generateRandomString( const size_t &stringLength )
 {
     std::string maskingChars{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890" };
-
     std::string str( stringLength, '\0' );
 
     for( size_t i = 0; i < stringLength; ++i )
@@ -242,6 +241,25 @@ std::vector<std::string> CSVParser::getColumnNames() const
 
 void CSVParser::insertColumn( const std::string &columnName, const std::string &defaultValue )
 {
+    const std::vector<std::string> values{ defaultValue };
+    this->insertColumn( columnName, values, defaultValue );
+}
+
+void CSVParser::insertColumn( const std::string &columnName, std::vector<std::string> values, const std::string &defaultValue )
+{
+    const size_t valueRows = { this->csvDataMatrix.size() - 1 };
+
+    if( values.size() > valueRows )
+    {
+        throw RowSizeLimitException( "Input values too large. Values: " +
+            std::to_string(values.size()) +
+            " Rows: " + std::to_string( valueRows ) );
+    }
+    else
+    {
+        values.resize(valueRows, defaultValue);
+    }
+
     if( this->csvDataMatrix.empty() )
     {
         // TODO: warn, that first column is created and no values inserted (default-Value is ignored in that case)
@@ -251,12 +269,10 @@ void CSVParser::insertColumn( const std::string &columnName, const std::string &
 
     this->csvDataMatrix.at( 0 ).push_back( columnName );
 
-    std::for_each( this->csvDataMatrix.begin() + 1,
-                   this->csvDataMatrix.end(),
-                   [&defaultValue]( std::vector<std::string> &row ) {
-                       row.push_back( defaultValue );
-                   }
-    );
+    for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
+    {
+        this->csvDataMatrix.at(i).push_back( values.at( i - 1 ) );
+    }
 }
 
 bool CSVParser::isUnique( const std::string &columnName )
@@ -474,7 +490,7 @@ void CSVParser::mapCSVData( const std::vector<std::string> &rows )
         csvDataMatrix.push_back( columns );
     }
 
-    this->reduceDataRows();
+    this->resizeDataRows();
 }
 
 size_t CSVParser::getColumnIndex( const std::string &columnName ) const
@@ -490,7 +506,7 @@ size_t CSVParser::getColumnIndex( const std::string &columnName ) const
     return columnIndex;
 }
 
-void CSVParser::reduceDataRows()
+void CSVParser::resizeDataRows()
 {
     // resize vectors to column-title length
 

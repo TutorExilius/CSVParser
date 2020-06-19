@@ -34,6 +34,15 @@ public:
     }
 };
 
+class RowSizeLimitException : virtual public std::runtime_error
+{
+public:
+    RowSizeLimitException( const std::string &msg )
+        : std::runtime_error( msg )
+    {
+    }
+};
+
 // ---
 
 class CSVParser final
@@ -52,7 +61,7 @@ public:
     static std::string generateRandomString( const size_t &stringLength );
     // ---
 
-    CSVParser( const char &seperator = ';' );
+    CSVParser( const char &seperator = ',' );
     ~CSVParser() = default;
 
     void parse( const std::string &fullFileName );
@@ -71,12 +80,13 @@ public:
     CountGroups countedGroupsByColumn( const std::string &columnName ) const;
     std::vector<std::string> getColumnNames() const;
     void insertColumn( const std::string &columnName, const std::string &defaultValue = std::string{} );
+    void insertColumn( const std::string &columnName, std::vector<std::string> values,
+                       const std::string &defaultValue = std::string{} );
     bool isUnique( const std::string &columnName );
     // ---
 
 private:
     // deletes ---
-    CSVParser() = delete;
     CSVParser( const CSVParser &obj ) = delete;
     CSVParser( CSVParser &&obj ) = delete;
     CSVParser& operator=( const CSVParser &obj ) = delete;
@@ -95,7 +105,7 @@ private:
     void maskColumnSeperators( std::vector<std::string> &rows );
     void mapCSVData( const std::vector<std::string> &rows );
     size_t getColumnIndex( const std::string &columnName ) const;
-    void reduceDataRows();
+    void resizeDataRows();
     // ---
 
     std::string fileName;
