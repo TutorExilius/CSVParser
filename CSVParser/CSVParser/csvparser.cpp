@@ -2,9 +2,6 @@
 
 Author:			Tutor Exilius (http://www.exilius.de)
 
-Created:		12.10.2018
-Last update:		14.06.2020
-
 GNU General Public License v3.0
 
 Permissions of this strong copyleft license are conditioned on making available
