@@ -5,6 +5,7 @@
 
 # User-specific files
 main.cpp
+.vshistory/
 *.csv
 *.rsuser
 *.suo

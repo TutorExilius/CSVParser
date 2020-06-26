@@ -151,7 +151,7 @@ std::string CSVParser::getFullFileName() const
     return this->getFilePath() + this->getFileName();
 }
 
-const CSVParser::Matrix &CSVParser::getCSVMatrix() const
+const Matrix &CSVParser::getCSVMatrix() const
 {
     return this->csvDataMatrix;
 }
@@ -183,92 +183,17 @@ char CSVParser::getSeperator() const
     return this->seperator;
 }
 
-std::vector<std::string> CSVParser::getColumnValues( const std::string &columnName ) const
+TableView* CSVParser::getTableView( const std::string &name ) const
 {
-    if( this->csvDataMatrix.size() == 0 )
+    auto tableViewIt = this->tableViews.find( name );
+
+    if( tableViewIt != this->tableViews.end() )
     {
-        return std::vector<std::string>{};
-    }
-
-    const std::vector<std::string> columnNames( this->csvDataMatrix.at( 0 ) );
-    const size_t columnIndex{ this->getColumnIndex( columnName ) };
-
-    std::vector<std::string> columnValues;
-
-    for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
-    {
-        columnValues.push_back( this->csvDataMatrix.at( i ).at( columnIndex ) );
-    }
-
-    return columnValues;
-}
-
-CSVParser::Groups CSVParser::groupByColumn( const std::string &columnName ) const
-{
-    const size_t columnIndex{ this->getColumnIndex( columnName ) };
-
-    Groups groups;
-
-    for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
-    {
-        const std::string key{ csvDataMatrix.at( i ).at( columnIndex ) };
-
-        groups[key].push_back( csvDataMatrix.at( i ) );
-    }
-
-    return groups;
-}
-
-CSVParser::CountGroups CSVParser::countedGroupsByColumn( const std::string &columnName ) const
-{
-    CountGroups groups_count;
-
-    for( const auto &group : this->groupByColumn( columnName ) )
-    {
-        groups_count[group.first] += group.second.size();
-    }
-
-    return groups_count;
-}
-
-std::vector<std::string> CSVParser::getColumnNames() const
-{
-    return this->csvDataMatrix.at( 0 );
-}
-
-void CSVParser::insertColumn( const std::string &columnName, const std::string &defaultValue )
-{
-    const std::vector<std::string> values{ defaultValue };
-    this->insertColumn( columnName, values, defaultValue );
-}
-
-void CSVParser::insertColumn( const std::string &columnName, std::vector<std::string> values, const std::string &defaultValue )
-{
-    const size_t valueRows = { this->csvDataMatrix.size() - 1 };
-
-    if( values.size() > valueRows )
-    {
-        throw RowSizeLimitException( "Input values too large. Values: " +
-            std::to_string(values.size()) +
-            " Rows: " + std::to_string( valueRows ) );
+        return tableViewIt->second;
     }
     else
     {
-        values.resize(valueRows, defaultValue);
-    }
-
-    if( this->csvDataMatrix.empty() )
-    {
-        // TODO: warn, that first column is created and no values inserted (default-Value is ignored in that case)
-        // create first, empty row
-        this->csvDataMatrix.push_back( std::vector<std::string>{} );
-    }
-
-    this->csvDataMatrix.at( 0 ).push_back( columnName );
-
-    for( size_t i = 1; i < this->csvDataMatrix.size(); ++i )
-    {
-        this->csvDataMatrix.at(i).push_back( values.at( i - 1 ) );
+        return nullptr;
     }
 }
 
@@ -294,6 +219,31 @@ bool CSVParser::isUnique( const std::string &columnName )
     {
         throw ColumnNotFound{ columnName + " not found" };
     }
+}
+
+void CSVParser::set( const Point &index, const std::string &value )
+{
+    this->csvDataMatrix.at( index.row ).at( index.col ) = value;
+}
+
+std::string CSVParser::get( const Point &index )
+{
+    return this->csvDataMatrix.at( index.row ).at( index.col );
+}
+
+std::string* CSVParser::refGet( const Point &index )
+{
+    return &(this->csvDataMatrix.at( index.row ).at( index.col ));
+}
+
+TableView* CSVParser::createTableView( const std::string &name, const Point &from, const Point &to )
+{
+    TableView *view = new TableView( this->csvDataMatrix, from, to, this );
+
+    // TODO: check uniqueness!
+    this->tableViews[name] = view;
+
+    return view;
 }
 
 std::vector<std::string> CSVParser::combineMissplittedColumns( const std::vector<std::string> &seperatedColumns )
@@ -439,13 +389,12 @@ void CSVParser::maskColumnSeperators( std::vector<std::string> &rows )
 {
     // find masking string, that can be used as seperator-masker ---
     bool foundUniqueString = false;
-
     size_t generateStrLenght = 3;
+
     do
     {
         const std::string randomString = CSVParser::generateRandomString( generateStrLenght );
 
-        // 
         for( const auto &row : rows )
         {
             if( row.find( randomString ) != std::string::npos )
@@ -485,40 +434,5 @@ void CSVParser::mapCSVData( const std::vector<std::string> &rows )
         }
 
         csvDataMatrix.push_back( columns );
-    }
-
-    this->resizeDataRows();
-}
-
-size_t CSVParser::getColumnIndex( const std::string &columnName ) const
-{
-    const std::vector<std::string> columnNames( this->csvDataMatrix.at( 0 ) );
-    const auto columnIndexIt{ std::find( columnNames.cbegin(),
-                                         columnNames.cend(),
-                                         columnName ) };
-    const size_t columnIndex{ static_cast<size_t>(
-        std::distance( columnNames.cbegin(), columnIndexIt )
-    ) };
-
-    return columnIndex;
-}
-
-void CSVParser::resizeDataRows()
-{
-    // resize vectors to column-title length
-
-    const size_t cntColumns = this->getColumnNames().size();
-    
-    if( cntColumns > 0 )
-    {
-        for( auto &row : this->csvDataMatrix )
-        {
-            row.resize( cntColumns );
-        }
-    }
-    else
-    {
-        // TODO: throw column len exception
-        // throw ...
     }
 }

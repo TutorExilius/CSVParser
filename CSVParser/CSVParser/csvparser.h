@@ -16,12 +16,11 @@ must be preserved.Contributors provide an express grant of patent rights.
 #define CSVPARSER_H
 
 #include <stdexcept>
-#include <string>
 #include <unordered_map>
-#include <vector>
+
+#include "tableview.h"
 
 // EXCEPTIONS ---
-
 class ColumnNotFound : virtual public std::runtime_error
 {
 public:
@@ -39,18 +38,12 @@ public:
     {
     }
 };
-
 // ---
+
 
 class CSVParser final
 {
 public:
-    // defines ---
-    using Groups = std::unordered_map<std::string, std::vector<std::vector<std::string>>>;
-    using CountGroups = std::unordered_map<std::string, size_t>;
-    using Matrix = std::vector<std::vector<std::string>>;
-    // ---
-
     // static ---
     static std::string extractFileName( const std::string &fullFileName );
     static std::string extractFilePath( const std::string &fullFileName );
@@ -70,17 +63,14 @@ public:
     const Matrix &getCSVMatrix() const;
     std::string getCSVOutput() const;
     char getSeperator() const;
-
-    // Matrix Operations ---
-    std::vector<std::string> getColumnValues( const std::string &columnName ) const;
-    Groups groupByColumn( const std::string &columnName ) const;
-    CountGroups countedGroupsByColumn( const std::string &columnName ) const;
-    std::vector<std::string> getColumnNames() const;
-    void insertColumn( const std::string &columnName, const std::string &defaultValue = std::string{} );
-    void insertColumn( const std::string &columnName, std::vector<std::string> values,
-                       const std::string &defaultValue = std::string{} );
+    TableView* getTableView( const std::string &name ) const;
     bool isUnique( const std::string &columnName );
+    void set( const Point &index, const std::string &value );
+    std::string get( const Point &index );
+    std::string* refGet( const Point &index );
     // ---
+
+    TableView* createTableView( const std::string &name, const Point &from, const Point &to );
 
 private:
     // deletes ---
@@ -101,8 +91,6 @@ private:
     std::vector<std::string> createRows( const std::vector<std::string> &seperatedColumns );
     void maskColumnSeperators( std::vector<std::string> &rows );
     void mapCSVData( const std::vector<std::string> &rows );
-    size_t getColumnIndex( const std::string &columnName ) const;
-    void resizeDataRows();
     // ---
 
     std::string fileName;
@@ -110,6 +98,8 @@ private:
     char seperator;
     Matrix csvDataMatrix;
     std::string seperatorMaskingStr;
+    // Pair: (unique name of table view, TableView)
+    std::unordered_map<std::string, TableView*> tableViews;
 };
 
 #endif // CSVPARSER_H

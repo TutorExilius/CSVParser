@@ -14,7 +14,6 @@ must be preserved.Contributors provide an express grant of patent rights.
 
 */
 
-
 #ifndef FILENOTFOUNDEXCEPTION_H
 #define FILENOTFOUNDEXCEPTION_H
 
