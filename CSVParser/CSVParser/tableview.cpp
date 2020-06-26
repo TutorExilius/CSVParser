@@ -19,23 +19,6 @@ TableView::TableView( Matrix &matrix, const Point &from, const Point &to, CSVPar
     }
 }
 
-void TableView::setMatrix( const RefMatrix &matrix )
-{
-    this->matrix = matrix;
-}
-
-void TableView::set( Point index, const std::string &value )
-{
-    index.row += 1;
-    this->csvParser->set( index, value );
-}
-
-const std::string TableView::get( Point index ) const
-{
-    index.row += 1;
-    return this->csvParser->get( index );
-}
-
 RefVec& TableView::operator[]( size_t index )
 {
     return this->matrix.at( index );
@@ -49,7 +32,7 @@ std::string TableView::toString() const
     {
         for( const auto &col : row )
         {
-            stream << col << this->csvParser->getSeperator();
+            stream << static_cast<std::string>( col ) << this->csvParser->getSeperator();
         }
 
         stream << "\n";

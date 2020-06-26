@@ -69,14 +69,15 @@ public:
     void set( const Point &index, const std::string &value );
     std::string get( const Point &index );
     std::string* refGet( const Point &index );
-
-    std::string toString() const;
-
-    std::vector<std::string>& operator[]( size_t index );
-    // ---
-
     TableView* createTableView( const std::string &name, const Point &from, const Point &to );
-
+    std::vector<std::string>& operator[]( size_t index );
+ 
+    // friends ---
+    friend std::ostream &operator<<( std::ostream &out, const CSVParser &obj )
+    {
+        out << obj.toString();
+        return out;
+    }
 private:
     // deletes ---
     CSVParser( const CSVParser &obj ) = delete;
@@ -86,6 +87,7 @@ private:
     // ---
 
     // helper-methods ---
+    std::string toString() const;
     std::vector<std::string> combineMissplittedColumns( const std::vector<std::string> &seperatedColumns );
     void maskColumnNewlines( std::vector<std::string> &seperatedColumns );
     void unMaskColumnNewlines( std::vector<std::string> &rows );

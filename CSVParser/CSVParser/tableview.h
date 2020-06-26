@@ -11,12 +11,7 @@ class TableView
 public:
     TableView( Matrix &matrix, const Point &from, const Point &to, CSVParser *const csvParser );
 
-    void setMatrix( const RefMatrix &matrix );
-    void set( Point index, const std::string &value );
-    const std::string get( Point index ) const;
-
     RefVec& operator[]( size_t index );
-    std::string toString() const;
     void save( const std::string &fullFileName ) const;
 
     // Matrix Operations ---
@@ -27,12 +22,22 @@ public:
     CountedGroups countGroupsByColumn( const std::string &columnName ) const;
     // ---
 
+    // friends ---
+    friend std::ostream &operator<<( std::ostream &out, const TableView &obj )
+    {
+        out << obj.toString();
+        return out;
+    }
 private:
     // deletes ---
     TableView( const TableView& ) = delete;
     TableView( TableView&& ) = delete;
     TableView& operator=( TableView & ) = delete;
     TableView& operator=( TableView && ) = delete;
+    // ---
+
+    // helper-methods ---
+    std::string toString() const;
     // ---
 
     CSVParser *csvParser;
