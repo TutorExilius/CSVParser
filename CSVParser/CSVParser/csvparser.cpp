@@ -267,6 +267,11 @@ std::string CSVParser::toString() const
     return stream.str();
 }
 
+std::vector<std::string>& CSVParser::operator[]( size_t index )
+{
+    return this->csvDataMatrix[index];
+}
+
 TableView* CSVParser::createTableView( const std::string &name, const Point &from, const Point &to )
 {
     TableView *view = new TableView( this->csvDataMatrix, from, to, this );

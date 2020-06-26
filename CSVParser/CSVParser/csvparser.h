@@ -71,6 +71,8 @@ public:
     std::string* refGet( const Point &index );
 
     std::string toString() const;
+
+    std::vector<std::string>& operator[]( size_t index );
     // ---
 
     TableView* createTableView( const std::string &name, const Point &from, const Point &to );
