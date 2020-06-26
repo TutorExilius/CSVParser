@@ -136,6 +136,20 @@ void CSVParser::parse( const std::string &fullFileName, const char seperator )
     this->parse( fullFileName );
 }
 
+void CSVParser::save( const std::string &fullFileName ) const
+{
+    std::ofstream outFile( fullFileName );
+
+    if( !outFile )
+    {
+        std::cerr << "Error: Could not save " << fullFileName << std::endl;
+        exit( -1 );
+    }
+
+    outFile << this->toString();
+    outFile.close();
+}
+
 std::string CSVParser::getFileName() const
 {
     return this->fileName;
@@ -234,6 +248,23 @@ std::string CSVParser::get( const Point &index )
 std::string* CSVParser::refGet( const Point &index )
 {
     return &(this->csvDataMatrix.at( index.row ).at( index.col ));
+}
+
+std::string CSVParser::toString() const
+{
+    std::stringstream stream;
+
+    for( const auto &row : this->csvDataMatrix )
+    {
+        for( const auto &col : row )
+        {
+            stream << col << this->getSeperator();
+        }
+
+        stream << "\n";
+    }
+
+    return stream.str();
 }
 
 TableView* CSVParser::createTableView( const std::string &name, const Point &from, const Point &to )

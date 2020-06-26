@@ -28,6 +28,13 @@ public:
 
     // friends ---
     struct RefStringHasher;
+
+    friend std::ostream &operator<<( std::ostream &out, const RefString &refString )
+    {
+        out << *( refString.ref );
+        return out;
+    }
+
     friend std::ostream& operator<<( std::ostream &out, RefString &refString )
     {
         out << *(refString.ref);

@@ -16,6 +16,8 @@ public:
     const std::string get( Point index ) const;
 
     RefVec& operator[]( size_t index );
+    std::string toString() const;
+    void save( const std::string &fullFileName ) const;
 
     // Matrix Operations ---
     Groups groupByColumn( const std::string &columnName ) const;

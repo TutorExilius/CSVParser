@@ -56,6 +56,7 @@ public:
 
     void parse( const std::string &fullFileName );
     void parse( const std::string &fullFileName, const char seperator );
+    void save( const std::string &fullFileName ) const;
 
     std::string getFileName() const;
     std::string getFilePath() const;
@@ -68,6 +69,8 @@ public:
     void set( const Point &index, const std::string &value );
     std::string get( const Point &index );
     std::string* refGet( const Point &index );
+
+    std::string toString() const;
     // ---
 
     TableView* createTableView( const std::string &name, const Point &from, const Point &to );

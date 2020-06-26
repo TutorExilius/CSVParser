@@ -1,7 +1,8 @@
 #include "tableview.h"
 #include "csvparser.h"
 
-#include <functional>
+#include <fstream>
+#include <sstream>
 
 TableView::TableView( Matrix &matrix, const Point &from, const Point &to, CSVParser *const csvParser )
 : csvParser{ csvParser }
@@ -38,6 +39,37 @@ const std::string TableView::get( Point index ) const
 RefVec& TableView::operator[]( size_t index )
 {
     return this->matrix.at( index );
+}
+
+std::string TableView::toString() const
+{
+    std::stringstream stream;
+
+    for( const auto &row : this->matrix )
+    {
+        for( const auto &col : row )
+        {
+            stream << col << this->csvParser->getSeperator();
+        }
+
+        stream << "\n";
+    }
+
+    return stream.str();
+}
+
+void TableView::save( const std::string &fullFileName ) const
+{
+    std::ofstream outFile( fullFileName );
+
+    if( !outFile )
+    {
+        std::cerr << "Error: Could not save " << fullFileName << std::endl;
+        exit( -1 );
+    }
+
+    outFile << this->toString();
+    outFile.close();
 }
 
 Groups TableView::groupByColumn( const std::string &columnName ) const
