@@ -52,7 +52,7 @@ public:
     // ---
 
     CSVParser( const char &seperator = ',' );
-    ~CSVParser() = default;
+    ~CSVParser();
 
     void parse( const std::string &fullFileName );
     void parse( const std::string &fullFileName, const char seperator );
@@ -71,7 +71,7 @@ public:
     std::string* refGet( const Point &index );
     TableView* createTableView( const std::string &name, const Point &from, const Point &to );
     std::vector<std::string>& operator[]( size_t index );
- 
+
     // friends ---
     friend std::ostream &operator<<( std::ostream &out, const CSVParser &obj )
     {

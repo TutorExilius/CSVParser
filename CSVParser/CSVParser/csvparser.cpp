@@ -93,6 +93,14 @@ CSVParser::CSVParser( const char &seperator )
 {
 }
 
+CSVParser::~CSVParser()
+{
+    for( const auto &tv : this->tableViews )
+    {
+        delete tv.second;
+    }
+}
+
 void CSVParser::parse( const std::string &fullFileName )
 {
     this->setFullFileName( fullFileName );
