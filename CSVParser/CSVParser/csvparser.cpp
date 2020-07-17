@@ -19,6 +19,7 @@ must be preserved.Contributors provide an express grant of patent rights.
 #include <cstring>
 #include <fstream>
 #include <iterator>
+#include <random>
 #include <sstream>
 
 // static ---
@@ -73,12 +74,18 @@ std::string CSVParser::replaceAll( std::string str, const std::string &from, con
 
 std::string CSVParser::generateRandomString( const size_t &stringLength )
 {
-    std::string maskingChars{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890" };
+    const std::string maskingChars{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890" };
+
+    std::random_device rd;      //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen( rd() );   //Standard mersenne_twister_engine seeded with rd()
+
+    std::uniform_int_distribution<size_t> distrib( 0, maskingChars.size() - 1 );
+
     std::string str( stringLength, '\0' );
 
     for( size_t i = 0; i < stringLength; ++i )
     {
-        const size_t randIndex = static_cast<size_t>( std::rand() ) % maskingChars.size();
+        const size_t randIndex = distrib( gen );
         str[i] = maskingChars[randIndex];
     }
 
