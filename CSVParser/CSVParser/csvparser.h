@@ -30,6 +30,15 @@ public:
     }
 };
 
+class FileNotFoundException final : virtual public std::runtime_error
+{
+public:
+    FileNotFoundException( const std::string &msg )
+    : std::runtime_error( msg )
+    {
+    }
+};
+
 class RowSizeLimitException : virtual public std::runtime_error
 {
 public:

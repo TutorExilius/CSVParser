@@ -21,9 +21,6 @@
     <ClCompile Include="csvparser.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="file_not_found_exception.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="tableview.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -33,9 +30,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="csvparser.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="file_not_found_exception.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="tableview.h">

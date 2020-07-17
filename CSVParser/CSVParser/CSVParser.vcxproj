@@ -125,14 +125,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="csvparser.cpp" />
-    <ClCompile Include="file_not_found_exception.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="refstring.cpp" />
     <ClCompile Include="tableview.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="csvparser.h" />
-    <ClInclude Include="file_not_found_exception.h" />
     <ClInclude Include="definitions.h" />
     <ClInclude Include="refstring.h" />
     <ClInclude Include="tableview.h" />
