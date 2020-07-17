@@ -17,6 +17,10 @@ must be preserved.Contributors provide an express grant of patent rights.
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+
+#include <filesystem>
+namespace fs = std::filesystem;
+
 #include <fstream>
 #include <iterator>
 #include <random>
@@ -25,38 +29,12 @@ must be preserved.Contributors provide an express grant of patent rights.
 // static ---
 std::string CSVParser::extractFileName( const std::string &fullFileName )
 {
-    // std::string tmpFileName = CSVParser::replaceAll( fullFileName, "\\", "/" );
-
-    const size_t pos = fullFileName.find_last_of( "/\\" );
-
-    if( pos != std::string::npos && pos + 1 < fullFileName.size() )
-    {
-        return fullFileName.substr( pos + 1 );
-    }
-    else if( fullFileName.size() > 0 )
-    {
-        return fullFileName;
-    }
-    else
-    {
-        return "";
-    }
+    return fs::path( fullFileName ).filename().string();
 }
 
 std::string CSVParser::extractFilePath( const std::string &fullFileName )
 {
-    //std::string tmpFileName = CSVParser::replaceAll( fullFileName, "\\", "/" );
-
-    const size_t pos = fullFileName.find_last_of( "/\\" );
-
-    if( pos != std::string::npos )
-    {
-        return fullFileName.substr( 0, pos + 1 );
-    }
-    else
-    {
-        return "";
-    }
+    return fs::path( fullFileName ).parent_path().string();
 }
 
 std::string CSVParser::replaceAll( std::string str, const std::string &from, const std::string &to )
@@ -175,7 +153,7 @@ std::string CSVParser::getFilePath() const
 
 std::string CSVParser::getFullFileName() const
 {
-    return this->getFilePath() + this->getFileName();
+    return (fs::path( this->getFilePath() ) / this->getFileName()).string();
 }
 
 const Matrix &CSVParser::getCSVMatrix() const
