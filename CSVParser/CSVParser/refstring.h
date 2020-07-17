@@ -27,8 +27,6 @@ public:
     operator const std::string() const;
 
     // friends ---
-    struct RefStringHasher;
-
     friend std::istream &operator>>( std::istream &in, RefString &refString )
     {
         in >> *( refString.ref );

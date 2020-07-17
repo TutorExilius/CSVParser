@@ -204,9 +204,6 @@ TableView* CSVParser::getTableView( const std::string &name ) const
 
 bool CSVParser::isUnique( const std::string &columnName )
 {
-    bool columname_exists = false;
-    bool unique = true;
-
     const auto pos = std::find( this->csvDataMatrix.at( 0 ).cbegin(),
                                 this->csvDataMatrix.at( 0 ).cend(),
                                 columnName );
@@ -265,7 +262,7 @@ std::vector<std::string>& CSVParser::operator[]( size_t index )
 
 TableView* CSVParser::createTableView( const std::string &name, const Point &from, const Point &to )
 {
-    TableView *view = new TableView( this->csvDataMatrix, from, to, this );
+    TableView *view = new TableView( from, to, this );
 
     // TODO: check uniqueness!
     this->tableViews[name] = view;
@@ -446,8 +443,6 @@ void CSVParser::maskColumnSeperators( std::vector<std::string> &rows )
 
 void CSVParser::mapCSVData( const std::vector<std::string> &rows )
 {
-    size_t cntColumnTitles = 0;
-
     for( const auto &row : rows )
     {
         std::stringstream ss{ row };

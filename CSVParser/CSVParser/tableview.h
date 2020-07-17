@@ -9,7 +9,7 @@ class CSVParser;
 class TableView
 {
 public:
-    TableView( Matrix &matrix, const Point &from, const Point &to, CSVParser *const csvParser );
+    TableView( const Point &from, const Point &to, CSVParser *const csvParser );
 
     RefVec& operator[]( size_t index );
     void save( const std::string &fullFileName ) const;

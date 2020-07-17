@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-TableView::TableView( Matrix &matrix, const Point &from, const Point &to, CSVParser *const csvParser )
+TableView::TableView( const Point &from, const Point &to, CSVParser *const csvParser )
 : csvParser{ csvParser }
 {
     for( size_t i = from.row; i <= to.row; ++i )
