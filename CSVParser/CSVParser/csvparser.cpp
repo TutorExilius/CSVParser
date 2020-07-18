@@ -364,7 +364,7 @@ void CSVParser::unMaskColumnNewlines( std::vector<std::string> &rows )
 
 bool CSVParser::isValidQuoted( const std::string &str )
 {
-    const size_t cnt = std::count( str.cbegin(), str.cend(), '\"' );
+    const size_t cnt = static_cast<size_t>( std::count( str.cbegin(), str.cend(), '\"' ) );
     return (cnt % 2 == 0);
 }
 

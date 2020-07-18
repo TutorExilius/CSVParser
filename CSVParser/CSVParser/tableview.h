@@ -28,6 +28,7 @@ public:
         out << obj.toString();
         return out;
     }
+
 private:
     // deletes ---
     TableView( const TableView& ) = delete;

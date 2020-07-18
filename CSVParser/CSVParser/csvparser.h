@@ -21,7 +21,7 @@ must be preserved.Contributors provide an express grant of patent rights.
 #include "tableview.h"
 
 // EXCEPTIONS ---
-class ColumnNotFound : virtual public std::runtime_error
+class ColumnNotFound : public std::runtime_error
 {
 public:
     ColumnNotFound( const std::string &msg )
@@ -30,7 +30,7 @@ public:
     }
 };
 
-class FileNotFoundException final : virtual public std::runtime_error
+class FileNotFoundException final : public std::runtime_error
 {
 public:
     FileNotFoundException( const std::string &msg )
@@ -39,7 +39,7 @@ public:
     }
 };
 
-class RowSizeLimitException : virtual public std::runtime_error
+class RowSizeLimitException : public std::runtime_error
 {
 public:
     RowSizeLimitException( const std::string &msg )
