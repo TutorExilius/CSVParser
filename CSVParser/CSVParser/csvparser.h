@@ -1,4 +1,8 @@
 /*
+CSVParser
+
+GNU GENERAL PUBLIC LICENSE
+https://github.com/TutorExilius/CSVParser
 
 Author:			Tutor Exilius (http://www.exilius.de)
 
@@ -8,9 +12,7 @@ Permissions of this strong copyleft license are conditioned on making available
 complete source code of licensed works and modifications, which include larger
 works using a licensed work, under the same license.Copyright and license notices
 must be preserved.Contributors provide an express grant of patent rights.
-
 */
-
 
 #ifndef CSVPARSER_H
 #define CSVPARSER_H
@@ -21,6 +23,15 @@ must be preserved.Contributors provide an express grant of patent rights.
 #include "tableview.h"
 
 // EXCEPTIONS ---
+class OutOfTableIndex final : public std::runtime_error
+{
+public:
+    OutOfTableIndex( const std::string &msg )
+        : std::runtime_error( msg )
+    {
+    }
+};
+
 class ColumnNotFound : public std::runtime_error
 {
 public:
@@ -78,6 +89,7 @@ public:
     void set( const Point &index, const std::string &value );
     std::string get( const Point &index );
     std::string* refGet( const Point &index );
+    TableView* createTableView( const std::string &name );
     TableView* createTableView( const std::string &name, const Point &from, const Point &to );
     std::vector<std::string>& operator[]( size_t index );
 

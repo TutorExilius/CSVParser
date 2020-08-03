@@ -1,4 +1,8 @@
 /*
+CSVParser
+
+GNU GENERAL PUBLIC LICENSE
+https://github.com/TutorExilius/CSVParser
 
 Author:			Tutor Exilius (http://www.exilius.de)
 
@@ -8,7 +12,6 @@ Permissions of this strong copyleft license are conditioned on making available
 complete source code of licensed works and modifications, which include larger
 works using a licensed work, under the same license.Copyright and license notices
 must be preserved.Contributors provide an express grant of patent rights.
-
 */
 
 
@@ -258,6 +261,22 @@ std::string CSVParser::toString() const
 std::vector<std::string>& CSVParser::operator[]( size_t index )
 {
     return this->csvDataMatrix[index];
+}
+
+TableView *CSVParser::createTableView( const std::string &name )
+{
+    if (this->csvDataMatrix.size() == 0)
+        throw OutOfTableIndex( "No rows in csvDataMatrix" );
+    else if( this->csvDataMatrix.at(0).size() == 0 )
+        throw OutOfTableIndex( "No cols in csvDataMatrix" );
+
+    const size_t rows = csvDataMatrix.size() - 1;
+    const size_t columns = csvDataMatrix.at( 1 ).size() - 1;
+
+    const Point from{ 0, 0 };
+    const Point to{ rows, columns };
+
+    return this->createTableView( name, from, to );
 }
 
 TableView* CSVParser::createTableView( const std::string &name, const Point &from, const Point &to )
