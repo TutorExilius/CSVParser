@@ -34,7 +34,8 @@ public:
     };
 
     RefString() = default;
-    RefString( std::string *ref );
+    RefString( const RefString &obj );
+    RefString( std::string *const ref );
 
     RefString& operator=( const std::string &value );
 

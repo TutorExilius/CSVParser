@@ -16,7 +16,12 @@ must be preserved.Contributors provide an express grant of patent rights.
 
 #include "refstring.h"
 
-RefString::RefString( std::string *ref )
+RefString::RefString( const RefString &obj )
+{
+    *this = obj;
+}
+
+RefString::RefString( std::string *const ref )
 : ref{ ref }
 {
 }
