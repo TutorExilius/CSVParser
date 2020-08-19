@@ -121,6 +121,7 @@ void CSVParser::parse( const std::string &fullFileName )
 
     CSVParser::unMaskColumnNewlines( rows );
 
+    rows[0] = this->replaceAll( rows[0], "\"", "" );
     this->mapCSVData( rows );
 }
 
