@@ -250,7 +250,15 @@ std::string CSVParser::toString() const
     {
         for( const auto &col : row )
         {
-            stream << col << this->getSeperator();
+            // seperator in value found. need to mask value
+            if( col.find( this->getSeperator() ) != std::string::npos )
+            { 
+                stream << "\"" << col << "\"" << this->getSeperator();
+            }
+            else
+            {
+                stream << col << this->getSeperator();
+            }
         }
 
         stream << "\n";
